@@ -10,6 +10,8 @@ namespace Matbot
     [Serializable]
     public enum UserRank
     {
+        Gali = -2,
+        Banned = -1,
         User = 0,
         Admin = 1,
         Owner = 2
