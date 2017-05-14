@@ -134,6 +134,31 @@ namespace Matbot
                             int i = FindUser(update.Message.From.Id);
                             if (i == -1) i = createNewUser(update.Message.From.Id);
 
+                            if(!cmd.Name.Equals("/register"))
+                            {
+                                bool registring = false;
+                                if(users[i].OperationQueue.Count>0)
+                                {
+                                    if (users[i].OperationQueue.Peek().Name.Equals("/register")) registring = true;
+                                }
+
+                                if(!registring)
+                                {
+                                    if (users[i].Rank == UserRank.Banned && !cmd.Name.Equals("/register"))
+                                    {
+                                        users[i].OperationQueue.Clear();
+                                        cmd.EmptyCommand();
+                                    }
+                                    else if (users[i].Rank == UserRank.Gali)
+                                    {
+                                        users[i].OperationQueue.Clear();
+                                        client.SendTextMessageAsync(update.Message.Chat.Id, cmd.Raw());
+                                        cmd.EmptyCommand();
+                                    }
+                                }
+                            }
+                            
+
 
                             if (users[i].OperationQueue.Count != 0)
                             {
@@ -255,6 +280,7 @@ namespace Matbot
                                         Telegram.Bot.Types.ChatMember mem = client.GetChatMemberAsync(update.Message.Chat.Id, x).Result;
                                         while (mem == null) ;
                                         client.SendTextMessageAsync(update.Message.Chat.Id, "I upgraded " + mem.User.FirstName + " " + mem.User.LastName + "'s (" + x + ") rank to: " + users[j].Rank.ToString() + "!");
+                                        if(users[j].Rank==UserRank.Gali) client.SendTextMessageAsync(update.Message.Chat.Id, "Pfffffttt. What a loser!");
                                     }
                                 }
                             }

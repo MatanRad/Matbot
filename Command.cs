@@ -29,6 +29,11 @@ namespace Matbot
             return str;
         }
 
+        public void EmptyCommand()
+        {
+            Name = "";
+        }
+
         public Command(string cmd)
         {
             int spaceIndex = cmd.IndexOf(' ');
