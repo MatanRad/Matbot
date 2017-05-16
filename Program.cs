@@ -535,7 +535,15 @@ namespace Matbot
                         }
                         
                     }
-                    offset = currupdate.Id + 1;
+                    try
+                    {
+                        offset = currupdate.Id + 1;
+                    }
+                    catch
+                    {
+                        offset = 0;
+                    }
+                    
                 }
             }
         }
