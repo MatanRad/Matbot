@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Matbot.Commands
+namespace Matbot.Commands.Structure
 {
     public static class MethodInfoExtension
     {

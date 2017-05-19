@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Matbot.Commands
+namespace Matbot.Commands.Structure
 {
     class CmdVariation
     {
@@ -13,6 +13,13 @@ namespace Matbot.Commands
         public List<CmdAttribute> Attributes = new List<CmdAttribute>();
         public string Description = "";
         
+        public Type[] GetAttributeTypes()
+        {
+            Type[] t = new Type[Attributes.Count];
+            for (int i = 0; i < t.Length; i++) t[i] = Attributes[i].AType;
+
+            return t;
+        }
         
         public override string ToString()
         {
@@ -51,8 +58,11 @@ namespace Matbot.Commands
 
             for(int i=0;i<attr.Length;i++)
             {
-                attr[i] = new CmdAttribute(parameters[i].Name, parameters[i].GetType(), parameters[i].IsOptional);
+                //ParameterInfo p = parameters[i];
+                attr[i] = new CmdAttribute(parameters[i].Name, parameters[i].ParameterType, parameters[i].IsOptional);
             }
+
+            Attributes = new List<CmdAttribute>(attr);
         }
 
         private void InitWithArray(CmdAttribute[] attr)

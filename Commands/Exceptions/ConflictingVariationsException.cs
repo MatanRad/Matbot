@@ -6,14 +6,16 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Matbot.Commands.Exceptions
+namespace Matbot.Commands.Structure.Exceptions
 {
     [Serializable]
     class ConflictingVariationsException : Exception
     {
         private static string GetFormattedMessage(string cmdName,CmdVariation[] vars, string input, MethodInfo method)
         {
-            string msg = "Conflicting variations for cmd \""+cmdName+"\" and variation method:\n"+method.GetFormattedCmdString()+"\nThe variations:\n";
+            string methoddesc = "(Not applicable)";
+            if (method != null) methoddesc = method.GetFormattedCmdString();
+            string msg = "Conflicting variations for cmd \""+cmdName+"\" and variation method:\n"+methoddesc+"\nThe variations:\n";
 
             foreach(CmdVariation i in vars)
             {

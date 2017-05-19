@@ -4,16 +4,17 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using Matbot.Commands.Exceptions;
+using Matbot.Commands.Structure.Exceptions;
 
-namespace Matbot.Commands
+namespace Matbot.Commands.Structure
 {
     abstract class Command : ICommand
     {
         public string Name
-        { get; private set; }
+        { get; protected set; }
         
         public static string executeMethodName = "Execute";
+        protected static BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public;
 
         private CmdVariation[] variations;
 
@@ -35,22 +36,22 @@ namespace Matbot.Commands
             Variations = GetVariations();
         }
 
-        protected void AddCmdVariationDesc(MethodInfo method, string desc, string[] names = null)
+        protected CmdVariation FindVariationByMethodInfo(MethodInfo method)
         {
             List<CmdVariation> conflicting = new List<CmdVariation>();
             CmdVariation v = null;
 
             if (!method.Name.Equals(Command.executeMethodName)) throw new InvalidVariationMethodException(method);
 
-            foreach(CmdVariation i in Variations)
+            foreach (CmdVariation i in Variations)
             {
                 bool failed = false;
                 if (i.Attributes.Count != method.GetParameters().Length) continue;
 
                 for (int j = 0; j < i.Attributes.Count; j++)
                 {
-                    if(!( i.Attributes[j].AType.Equals(method.GetParameters()[j].GetType())
-                        && i.Attributes[j].Optional==method.GetParameters()[j].IsOptional
+                    if (!(i.Attributes[j].AType.Equals(method.GetParameters()[j].GetType())
+                        && i.Attributes[j].Optional == method.GetParameters()[j].IsOptional
                         && i.Attributes[j].ParamName.Equals(method.GetParameters()[j].Name)))
                     {
                         failed = true;
@@ -58,7 +59,7 @@ namespace Matbot.Commands
                     }
                 }
 
-                if(!failed)
+                if (!failed)
                 {
                     conflicting.Add(i);
                     v = i;
@@ -67,6 +68,13 @@ namespace Matbot.Commands
 
             if (conflicting.Count == 0) throw new InvalidVariationMethodException(method);
             if (conflicting.Count > 1) throw new ConflictingVariationsException(this.Name, conflicting.ToArray(), "", method);
+
+            return v;
+        }
+
+        protected void AddCmdVariationDesc(MethodInfo method, string desc, string[] names = null)
+        {
+            CmdVariation v = FindVariationByMethodInfo(method);
 
             v.Description = desc;
 
@@ -83,7 +91,7 @@ namespace Matbot.Commands
 
         private CmdVariation[] GetVariations()
         {
-            MethodInfo[] allmethods = this.GetType().GetMethods(BindingFlags.Instance | BindingFlags.Public);
+            MethodInfo[] allmethods = this.GetType().GetMethods(Command.bindingFlags);
             int count = 0;
 
             foreach (MethodInfo i in allmethods) if (i.Name.Equals(executeMethodName)) count++;
@@ -104,6 +112,15 @@ namespace Matbot.Commands
         }
 
         public abstract void Execute();
+
+        public virtual void ReformatInput(ParsedInput input) { }
+
+        public void ExecuteVariation(CmdVariation v, object[] parameters)
+        {
+            MethodInfo m = this.GetType().GetMethod(Command.executeMethodName, Command.bindingFlags, null, v.GetAttributeTypes(), null);
+
+            m.Invoke(this, parameters);
+        }
 
     }
 }

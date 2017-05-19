@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Matbot.Commands;
 
-namespace Matbot.Commands.Exceptions
+namespace Matbot.Commands.Structure.Exceptions
 {
     [Serializable]
     class InvalidVariationNameCountException : Exception
