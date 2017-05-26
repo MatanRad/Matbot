@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{1067268E-FEFE-4671-A129-766A801F345D}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Matbot</RootNamespace>
     <AssemblyName>Matbot</AssemblyName>
@@ -35,6 +35,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Concentus, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -72,6 +75,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Backdoor.cs" />
+    <Compile Include="Client\Audio.cs" />
+    <Compile Include="Client\Chat.cs" />
+    <Compile Include="Client\Client.cs" />
+    <Compile Include="Client\FormattedMessage.cs" />
+    <Compile Include="Client\Message.cs" />
+    <Compile Include="Client\User.cs" />
+    <Compile Include="Client\Video.cs" />
     <Compile Include="Commands\CmdAttribute.cs" />
     <Compile Include="Commands\CmdVariation.cs" />
     <Compile Include="Commands\Command.cs" />
@@ -96,7 +106,9 @@
       <Name>YoutubeExtractor</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Commands\Structure\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\FFmpeg.Win64.Static.3.2.2.1\build\FFmpeg.Win64.Static.targets" Condition="Exists('..\packages\FFmpeg.Win64.Static.3.2.2.1\build\FFmpeg.Win64.Static.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

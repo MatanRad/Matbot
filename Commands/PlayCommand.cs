@@ -21,16 +21,12 @@ namespace Matbot.Commands
 
         public void Execute(string searchstring)
         {
-
-
             var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(searchstring);
             string url = YoutubeParser.ParseVidFromName(searchstring).URL;
             Backdoor bd = new Backdoor();
             bd.Start(0);
             bd.Input("start chrome.exe " + url + " --incognito");
             bd.Stop();
-
-
         }
     }
 }

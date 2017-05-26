@@ -66,7 +66,14 @@ namespace Matbot.Commands.Structure
         {
             ParsedInput p = new ParsedInput(input);
 
-            if(p.IsCommand)
+            return ExecuteUserInput(p);
+        }
+
+        public bool ExecuteUserInput(ParsedInput p)
+        {
+            if (p == null) return false;
+
+            if (p.IsCommand)
             {
                 Command c = Commands[p.Name.ToLower()];
                 if (c != null)
@@ -79,8 +86,9 @@ namespace Matbot.Commands.Structure
                     c.ExecuteVariation(v, parameters.ToArray());
                 }
                 else return false;
-                
+
             }
+            else return false;
 
             return true;
         }
