@@ -12,6 +12,7 @@ namespace MatbotTelegram
         {
             TelegramClient cl = new TelegramClient("220913134:AAHwC-5P5H14sFfx7eDlXYf9qobIx25OFWQ");
             cl.Start();
+            Matbot.ConsoleHider.HideConsole();
             while (true) ;
         }
     }
