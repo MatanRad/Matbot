@@ -17,8 +17,8 @@ namespace Matbot
         private Thread shellThread;
 
 
-        public Telegram.Bot.TelegramBotClient client;
-        public long chatId;
+        public Client.Client client;
+        public Client.ChatId chatId;
 
         public bool Running = false;
 
@@ -27,9 +27,9 @@ namespace Matbot
             try
             {
                 String tempBuf = "\n";
-                while ((tempBuf = fromShell.ReadLine()) != null)
+                while ((tempBuf = fromShell.ReadLine()) != null && client!=null)
                 {
-                    client.SendTextMessageAsync(chatId, tempBuf + "\n");
+                    client.SendMessage(chatId, tempBuf + "\n");
                     Thread.Sleep(50);
                 }
 
@@ -38,8 +38,9 @@ namespace Matbot
         }
 
 
-        public void Start(long chatId)
+        public void Start(Client.ChatId chatId, Client.Client client = null)
         {
+            this.client = client;
             this.chatId = chatId;
 
             shell = new Process();
@@ -66,7 +67,7 @@ namespace Matbot
             {                                       //to the shell, so we could write our own if we want
                 if (com.Equals("exit"))
                 {                //In this case I catch the 'exit' command and use it
-                    client.SendTextMessageAsync(chatId, "\nClosing the shell...");
+                    client.SendMessage(chatId, "\nClosing the shell...");
                     Stop();                   //to drop the connection
                 }
                 toShell.WriteLine(com + "\r\n");

@@ -1,18 +1,17 @@
-﻿using System;
+﻿using NAudio.Wave;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Telegram.Bot;
 using YoutubeExtractor;
-using NAudio.Wave;
 
 namespace Matbot
 {
     class YoutubeDownloader
     {
-        public static AudioDescriber DownloadAudioWithProgress(YoutubeParser.YoutubeVidDetail detail, TelegramBotClient client, long chatid)
+        public static Client.Audio DownloadAudioWithProgress(YoutubeParser.YoutubeVidDetail detail, Client.Message message)
         {
             IEnumerable<VideoInfo> videoInfos = DownloadUrlResolver.GetDownloadUrls(detail.URL);
             VideoInfo video = videoInfos.First(info => info.VideoType == VideoType.Mp4 && info.Resolution == 360);
@@ -22,23 +21,25 @@ namespace Matbot
                 DownloadUrlResolver.DecryptDownloadUrl(video);
             }
 
+            message.Reply("Found!");
+
             string filename = string.Join("", video.Title.Split(Path.GetInvalidFileNameChars()));
-            var videoDownloader = new VideoDownloader(video, Path.Combine("ffmpeg", filename + video.VideoExtension));
+            var videoDownloader = new VideoDownloader(video, Path.GetFullPath(Path.Combine("ffmpeg", filename + video.VideoExtension)));
 
             int prev = 1;
-            int mul = 25;
-            videoDownloader.DownloadProgressChanged += (sender, argss) => 
+            int mul = 125;
+            videoDownloader.DownloadProgressChanged += (sender, argss) =>
             {
                 int prog = (int)Math.Round(argss.ProgressPercentage);
-                if(prog>=prev*mul)
+                if (prog >= prev * mul)
                 {
-                    client.SendTextMessageAsync(chatid, (mul * prev) + "%");
+                    message.Reply((mul * prev) + "%");
                     prev++;
                 }
             };
 
             videoDownloader.Execute();
-            client.SendTextMessageAsync(chatid, "Converting!");
+            //message.Reply("Converting!");
             Convert(filename);
 
             File.Delete(Path.Combine("ffmpeg", filename + video.VideoExtension));
@@ -53,11 +54,11 @@ namespace Matbot
             reader.Close();
 
             File.Delete(Path.Combine("ffmpeg", filename + ".mp3"));
-            client.SendTextMessageAsync(chatid, "Success!");
+            message.Reply("Success!");
 
-            System.Diagnostics.Debug.WriteLine("\n\nTitle: "+ video.Title + "Duration: " + (int)duration.TotalSeconds);
+            System.Diagnostics.Debug.WriteLine("\n\nTitle: " + video.Title + "Duration: " + (int)duration.TotalSeconds);
 
-            return new AudioDescriber((int)duration.TotalSeconds, detail.Channel, filename, mstream);
+            return new Client.Audio(filename, detail.Channel, (int)duration.TotalSeconds, mstream, "mp3");
         }
 
         public static void Convert(string file)
