@@ -89,6 +89,8 @@
     <Compile Include="Client\Video.cs" />
     <Compile Include="Commands\ACComCommand.cs" />
     <Compile Include="Commands\ACCommand.cs" />
+    <Compile Include="Commands\AlarmCommand.cs" />
+    <Compile Include="Commands\BotConsoleCommand.cs" />
     <Compile Include="Commands\MyIdCommand.cs" />
     <Compile Include="Commands\MyRankCommand.cs" />
     <Compile Include="Commands\RegisterCommand.cs" />
@@ -106,6 +108,7 @@
     <Compile Include="Commands\PlayCommand.cs" />
     <Compile Include="Commands\Structure\SingleStringCommand.cs" />
     <Compile Include="Commands\UpgradeCommand.cs" />
+    <Compile Include="ConsoleHider.cs" />
     <Compile Include="HttpGetter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Commands\SongCommand.cs" />

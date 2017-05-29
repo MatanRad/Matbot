@@ -40,6 +40,7 @@ namespace Matbot.Commands.Structure
 
             foreach(CmdVariation v in vars)
             {
+                if (v == null) continue;
                 if (v.Attributes.Count != param.Length) continue;
                 bool failed = false;
                 for (int i=0;i<v.Attributes.Count;i++)

@@ -36,6 +36,8 @@ namespace Matbot.Client
             Matbot.Commands.ACCommand cm6 = new Commands.ACCommand();
             Matbot.Commands.ACComCommand cm7 = new Commands.ACComCommand();
             Matbot.Commands.SongCommand cm8 = new Commands.SongCommand();
+            Matbot.Commands.BotConsoleCommand cm9 = new Commands.BotConsoleCommand();
+            Matbot.Commands.AlarmCommand cm10 = new Commands.AlarmCommand();
             CommandManager.RegisterNewCommand(cmd);
             CommandManager.RegisterNewCommand(cm2);
             CommandManager.RegisterNewCommand(cm3);
@@ -44,6 +46,8 @@ namespace Matbot.Client
             CommandManager.RegisterNewCommand(cm6);
             CommandManager.RegisterNewCommand(cm7);
             CommandManager.RegisterNewCommand(cm8);
+            CommandManager.RegisterNewCommand(cm9);
+            CommandManager.RegisterNewCommand(cm10);
         }
 
         public Client()

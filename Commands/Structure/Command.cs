@@ -128,7 +128,9 @@ namespace Matbot.Commands.Structure
 
             CmdVariation[] vars = new CmdVariation[count];
 
-            for(int i=0;i<count;i++)
+            int ind = 0;
+
+            for(int i=0;i< allmethods.Length; i++)
             {
                 if (allmethods[i].Name.Equals(executeMethodName) && allmethods[i].GetParameters().Length >= Command.InitialTypes.Length)
                 {
@@ -144,7 +146,12 @@ namespace Matbot.Commands.Structure
                             break;
                         }
                     }
-                    if (insert) vars[i] = new CmdVariation(this.Name, FilterOutMethodParameters<ParameterInfo>(parameters));
+                    if (insert)
+                    {
+                        vars[ind] = new CmdVariation(this.Name, FilterOutMethodParameters<ParameterInfo>(parameters));
+                        ind++;
+                    }
+
                 }
             }
 
