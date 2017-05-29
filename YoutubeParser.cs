@@ -23,7 +23,7 @@ namespace Matbot
         public static YoutubeVidDetail ParseVidFromName(string name)
         {
             var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(name);
-            string[] dets = HttpGetter.GetHTMLContent("http://radomski.co.il/youtube/?b64=" + System.Convert.ToBase64String(plainTextBytes)).Split(';');
+            string[] dets = HttpGetter.GetHTMLContent("http://kindvideo.xyz/youtube/?b64=" + System.Convert.ToBase64String(plainTextBytes)).Split(';');
             return new YoutubeVidDetail("http://www.youtube.com/watch?v=" + dets[0], dets[1]);
         }
     }

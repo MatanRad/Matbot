@@ -6,9 +6,12 @@ using System.Threading.Tasks;
 
 namespace Matbot.Client
 {
+    [Serializable]
     public class ChatId
     {
         public Dictionary<string, ulong> Ids = new Dictionary<string, ulong>();
+
+        private ChatId() { }
 
         public ulong this[string key]
         {

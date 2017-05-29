@@ -29,5 +29,11 @@ namespace Matbot.Client
             Type = type;
             Id = new ChatId(clientId, id);
         }
+
+        public Chat(ChatId id, ChatType type)
+        {
+            Type = type;
+            Id = id;
+        }
     }
 }

@@ -8,6 +8,6 @@ namespace Matbot.Commands.Structure
 {
     interface ICommand
     {
-        void Execute();
+        void Execute(Matbot.Client.Message message);
     }
 }

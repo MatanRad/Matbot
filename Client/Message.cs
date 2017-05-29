@@ -28,7 +28,7 @@ namespace Matbot.Client
         public MessageType Type { get; private set; }
 
 
-        private Client Client = null;
+        public readonly Client Client = null;
 
         public Message(Chat chat, User user, string text)
         {
@@ -37,7 +37,7 @@ namespace Matbot.Client
             Text = text;
         }
 
-        public Message(Chat chat, User user, string text, Client client)
+        public Message(Client client, Chat chat, User user, string text)
         {
             Chat = chat;
             User = user;

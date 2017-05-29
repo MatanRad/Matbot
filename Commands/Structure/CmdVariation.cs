@@ -69,5 +69,14 @@ namespace Matbot.Commands.Structure
         {
             Attributes = new List<CmdAttribute>(attr);
         }
+
+        internal Type[] GetMethodAttributeTypes()
+        {
+            Type[] t = new Type[Attributes.Count+Command.InitialTypes.Length];
+            t[0] = typeof(Matbot.Client.Message);
+            for (int i = Command.InitialTypes.Length; i < t.Length; i++) t[i] = Attributes[i- Command.InitialTypes.Length].AType;
+
+            return t;
+        }
     }
 }

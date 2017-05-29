@@ -21,6 +21,14 @@ namespace Matbot.Commands.Structure
             
         }
 
+        private static object ConvertToObj(object value, Type conversionType)
+        {
+            if (conversionType.IsEnum && (value.GetType().Equals(typeof(string)) || value.GetType().Equals(typeof(String))))
+                return Enum.Parse(conversionType, (string)value);
+
+            return Convert.ChangeType(value, conversionType);
+        }
+
         public static CmdVariation FindCommandVariationByParsedInput(ParsedInput input, Command cmd, out List<object> converted)
         {
             CmdVariation[] vars = cmd.Variations;
@@ -39,7 +47,7 @@ namespace Matbot.Commands.Structure
                     CmdAttribute a = v.Attributes[i];
                     try
                     {
-                        object t = Convert.ChangeType(param[i], a.AType);
+                        object t = ConvertToObj(param[i], a.AType);
                         converted.Add(t);
                     }
                     catch (InvalidCastException)
@@ -62,28 +70,54 @@ namespace Matbot.Commands.Structure
             return conflicts[0];
         }
 
-        public bool ExecuteUserInput(string input)
+        public bool ExecuteUserInput(Matbot.Client.Message msg, string input)
         {
             ParsedInput p = new ParsedInput(input);
-
-            return ExecuteUserInput(p);
+            return ExecuteUserInput(msg, p);
         }
 
-        public bool ExecuteUserInput(ParsedInput p)
+        public bool ExecuteUserInput(Matbot.Client.Message msg, ParsedInput p)
         {
             if (p == null) return false;
 
+            if(msg.User.BotRank== Client.UserRank.Gali)
+            {
+                bool c = true;
+                if(p.Name!=null)
+                {
+                    if(p.Name.Equals("register"))
+                    {
+                        c = false;
+                    }
+                }
+                if(c)
+                {
+                    msg.Reply(p.RawInput);
+                    return false;
+                }
+            }
+
             if (p.IsCommand)
             {
+                if (!Commands.ContainsKey(p.Name.ToLower())) return false;
                 Command c = Commands[p.Name.ToLower()];
                 if (c != null)
                 {
                     c.ReformatInput(p);
 
                     List<object> parameters;
-                    CmdVariation v = FindCommandVariationByParsedInput(p, c, out parameters);
+                    try
+                    {
+                        CmdVariation v = FindCommandVariationByParsedInput(p, c, out parameters);
 
-                    c.ExecuteVariation(v, parameters.ToArray());
+                        c.ExecuteVariation(v, msg, parameters.ToArray());
+                    }
+                    catch (CorrectVariationNotFoundException ex)
+                    {
+                        msg.Reply(ex.Message);
+                        return false;
+                    }
+                    
                 }
                 else return false;
 

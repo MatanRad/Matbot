@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Matbot.Commands.Structure;
-using Matbot;
+using Matbot.Client;
 
 namespace Matbot.Commands
 {
@@ -14,17 +14,19 @@ namespace Matbot.Commands
         {
         }
 
-        public override void Execute()
+        public override void Execute(Message m)
         {
 
         }
 
-        public void Execute(string searchstring)
+        public void Execute(Message m,string searchstring)
         {
+            Console.WriteLine("user: " + m.User.Id["telegram"]);
             var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(searchstring);
             string url = YoutubeParser.ParseVidFromName(searchstring).URL;
+            m.Reply("I played the following video: " + url);
             Backdoor bd = new Backdoor();
-            bd.Start(0);
+            bd.Start(null);
             bd.Input("start chrome.exe " + url + " --incognito");
             bd.Stop();
         }
