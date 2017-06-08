@@ -89,6 +89,7 @@
     <Compile Include="Client\Video.cs" />
     <Compile Include="Commands\ACComCommand.cs" />
     <Compile Include="Commands\ACCommand.cs" />
+    <Compile Include="Commands\AddCommand.cs" />
     <Compile Include="Commands\AlarmCommand.cs" />
     <Compile Include="Commands\BotConsoleCommand.cs" />
     <Compile Include="Commands\MyIdCommand.cs" />

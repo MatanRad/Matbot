@@ -24,7 +24,17 @@ namespace Matbot.Commands.Structure
         private static object ConvertToObj(object value, Type conversionType)
         {
             if (conversionType.IsEnum && (value.GetType().Equals(typeof(string)) || value.GetType().Equals(typeof(String))))
-                return Enum.Parse(conversionType, (string)value);
+            {
+                try
+                {
+                    return Enum.Parse(conversionType, (string)value);
+                }
+                catch(ArgumentException)
+                {
+                    throw new InvalidCastException("Cannot convert \"" +(string)value + "\" to enum: "+conversionType.Name);
+                }
+            }
+                
 
             return Convert.ChangeType(value, conversionType);
         }
@@ -57,6 +67,7 @@ namespace Matbot.Commands.Structure
                         converted.Clear();
                         break;
                     }
+                    
                 }
 
                 if(!failed)
