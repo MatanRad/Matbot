@@ -80,6 +80,7 @@ namespace MatbotTelegram
         private void TClient_OnUpdate(object sender, Telegram.Bot.Args.UpdateEventArgs e)
         {
             Telegram.Bot.Types.Update u = e.Update;
+            if (u.Message.Type != Telegram.Bot.Types.Enums.MessageType.TextMessage) return;
             string text = u.Message.Text;
             Console.WriteLine("Message received: " + text);
             this.OnMessageReceived(FromTelegramMessage(e.Update.Message));
