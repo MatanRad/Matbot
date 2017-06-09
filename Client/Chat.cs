@@ -24,6 +24,11 @@ namespace Matbot.Client
 
         public ChatType Type { get; set; }
 
+        public virtual bool IsPrivate()
+        {
+            return Type == ChatType.Private;
+        }
+
         public Chat(string clientId, ulong id, ChatType type)
         {
             Type = type;

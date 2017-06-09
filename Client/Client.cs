@@ -9,8 +9,10 @@ namespace Matbot.Client
 {
     public abstract class Client
     {
-        CommandManager CmdManger = new CommandManager();
+        CommandManager CustomCmdManger = new CommandManager();
         UserDatabase usrDatabase = new UserDatabase();
+
+        List<Command> CustomCommands = new List<Command>();
 
         public UserDatabase UsrDatabase { get { return usrDatabase; } private set { usrDatabase = value; } }
 
@@ -23,7 +25,10 @@ namespace Matbot.Client
         {
             ParsedInput parsed = new ParsedInput(message.Text);
 
-            this.CmdManger.ExecuteUserInput(message, parsed);
+            if(!this.CustomCmdManger.ExecuteUserInput(message, parsed))
+            {
+                CommandManager.SharedManager.ExecuteUserInput(message, parsed);
+            }
         }
 
         public void Initialize()
@@ -39,17 +44,20 @@ namespace Matbot.Client
             Matbot.Commands.BotConsoleCommand cm9 = new Commands.BotConsoleCommand();
             Matbot.Commands.AlarmCommand cm10 = new Commands.AlarmCommand();
             Matbot.Commands.AddCommand cm11 = new Commands.AddCommand();
-            CommandManager.RegisterNewCommand(cmd);
-            CommandManager.RegisterNewCommand(cm2);
-            CommandManager.RegisterNewCommand(cm3);
-            CommandManager.RegisterNewCommand(cm4);
-            CommandManager.RegisterNewCommand(cm5);
-            CommandManager.RegisterNewCommand(cm6);
-            CommandManager.RegisterNewCommand(cm7);
-            CommandManager.RegisterNewCommand(cm8);
-            CommandManager.RegisterNewCommand(cm9);
-            CommandManager.RegisterNewCommand(cm10);
-            CommandManager.RegisterNewCommand(cm11);
+            Matbot.Commands.FindUserCommand cm12 = new Commands.FindUserCommand();
+            CommandManager.SharedManager.RegisterNewCommand(cmd);
+            CommandManager.SharedManager.RegisterNewCommand(cm2);
+            CommandManager.SharedManager.RegisterNewCommand(cm3);
+            CommandManager.SharedManager.RegisterNewCommand(cm4);
+            CommandManager.SharedManager.RegisterNewCommand(cm5);
+            CommandManager.SharedManager.RegisterNewCommand(cm6);
+            CommandManager.SharedManager.RegisterNewCommand(cm7);
+            CommandManager.SharedManager.RegisterNewCommand(cm8);
+            CommandManager.SharedManager.RegisterNewCommand(cm9);
+            CommandManager.SharedManager.RegisterNewCommand(cm10);
+            CommandManager.SharedManager.RegisterNewCommand(cm11);
+            CommandManager.SharedManager.RegisterNewCommand(cm12);
+
         }
 
         public Client()
@@ -70,7 +78,7 @@ namespace Matbot.Client
 
         public virtual Chat GetChatById(ChatId id)
         {
-            return null;
+            throw new NotImplementedException("GetChatById functionality not implemented in bot client with id: " + GetClientId());
         }
 
         public virtual bool SendMessage(ChatId id, string message)
@@ -96,9 +104,10 @@ namespace Matbot.Client
             throw new NotImplementedException("Reply for FormattedMessage not yet implemented");
         }
 
+        
         public virtual bool SendAudioMessage(Chat chat, Audio audio)
         {
-            return false;
+            throw new NotImplementedException("SendAudioMessage functionality not implemented in bot client with id: " + GetClientId());
         }
 
         public virtual User GetNewUser(ulong id)
@@ -114,9 +123,14 @@ namespace Matbot.Client
             return u;
         }
 
-        public virtual User GetChatMember(ChatId chatId,ulong id)
+        public virtual User GetChatMemberById(ChatId chatId,ulong id)
         {
-            return null;
+            throw new NotImplementedException("GetChatMember functionality not implemented in bot client with id: " + GetClientId());
+        }
+
+        public virtual User GetChatMemberByUsername(ChatId chatId, string username, bool exactMatch = true)
+        {
+            throw new NotImplementedException("GetChatMemberByUsername functionality not implemented in bot client with id: " + GetClientId());
         }
     }
 }

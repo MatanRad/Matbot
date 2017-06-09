@@ -7,7 +7,7 @@ using Matbot.Commands.Structure;
 
 namespace Matbot.Commands
 {
-    abstract class SingleStringCommand : Structure.Command
+    public abstract class SingleStringCommand : Structure.Command
     {
         public SingleStringCommand(string name) : base(name) { }
 

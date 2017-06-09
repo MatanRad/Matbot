@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Matbot.Commands.Structure
 {
-    class ParsedInput
+    public class ParsedInput
     {
         public bool IsCommand {
             get

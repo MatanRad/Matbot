@@ -23,7 +23,7 @@ namespace Matbot.Commands
 
         private bool VerifyContext(Message m)
         {
-            if(m.Chat.Type!=ChatType.Private)
+            if(!m.Chat.IsPrivate())
             {
                 m.Reply("You can only use this command in a private chat!");
                 return false;

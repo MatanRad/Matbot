@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Matbot.Commands.Structure
 {
-    class CmdVariation
+    public class CmdVariation
     {
         public string CommandName;
         public List<CmdAttribute> Attributes = new List<CmdAttribute>();

@@ -21,11 +21,14 @@ namespace Matbot.Commands
 
         public void Execute(Message msg, ulong id, UserRank rank)
         {
-            User user = msg.Client.GetChatMember(msg.Chat.Id, id);
+            User user = msg.Client.GetChatMemberById(msg.Chat.Id, id);
             if (user == null) return;
             user.ChangeDatabaseRank(rank);
 
-            msg.Reply("I upgraded " + id + " (" + user.Name + ")'s rank to: " + rank.ToString());
+            string name = user.Name;
+            if (name == null || name == "") name = user.Username;
+
+            msg.Reply("I upgraded " + id + " (" + name + ")'s rank to: " + rank.ToString());
 
 
         }

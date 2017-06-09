@@ -10,7 +10,7 @@ using Matbot.Client;
 
 namespace Matbot.Commands.Structure
 {
-    abstract class Command : ICommand
+    public abstract class Command : ICommand
     {
         public string Name
         { get; protected set; }
@@ -40,7 +40,7 @@ namespace Matbot.Commands.Structure
         {
             RequiredRank = UserRank.User;
             Name = name;
-            Variations = GetVariations();
+            Variations = InitVariations();
         }
 
         public virtual string GetNoPermissionMessage(Message m)
@@ -103,7 +103,7 @@ namespace Matbot.Commands.Structure
             }
         }
 
-        private CmdVariation[] GetVariations()
+        private CmdVariation[] InitVariations()
         {
             MethodInfo[] allmethods = this.GetType().GetMethods(Command.bindingFlags);
             int count = 0;
@@ -156,6 +156,49 @@ namespace Matbot.Commands.Structure
             }
 
             return vars;
+        }
+
+        public  CmdVariation FindCommandVariationByParsedInput(ParsedInput input, out List<object> converted)
+        {
+            CmdVariation[] vars = Variations;
+
+            converted = new List<object>();
+            List<CmdVariation> conflicts = new List<CmdVariation>();
+
+            string[] param = input.Parameters;
+
+            foreach (CmdVariation v in vars)
+            {
+                if (v == null) continue;
+                if (v.Attributes.Count != param.Length) continue;
+                bool failed = false;
+                for (int i = 0; i < v.Attributes.Count; i++)
+                {
+                    CmdAttribute a = v.Attributes[i];
+                    try
+                    {
+                        object t = ClassConverter.ConvertToObj(param[i], a.AType);
+                        converted.Add(t);
+                    }
+                    catch (InvalidCastException)
+                    {
+                        failed = true;
+                        converted.Clear();
+                        break;
+                    }
+
+                }
+
+                if (!failed)
+                {
+                    conflicts.Add(v);
+                }
+            }
+
+            if (conflicts.Count == 0) throw new CorrectVariationNotFoundException(input);
+            if (conflicts.Count > 1) throw new ConflictingVariationsException(input.Name, conflicts.ToArray(), input.RawInput, null);
+
+            return conflicts[0];
         }
 
         public static T[] FilterOutMethodParameters<T>(T[] info)

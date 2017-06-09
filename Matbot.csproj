@@ -92,9 +92,11 @@
     <Compile Include="Commands\AddCommand.cs" />
     <Compile Include="Commands\AlarmCommand.cs" />
     <Compile Include="Commands\BotConsoleCommand.cs" />
+    <Compile Include="Commands\FindUserCommand.cs" />
     <Compile Include="Commands\MyIdCommand.cs" />
     <Compile Include="Commands\MyRankCommand.cs" />
     <Compile Include="Commands\RegisterCommand.cs" />
+    <Compile Include="Commands\Structure\ClassConverter.cs" />
     <Compile Include="Commands\Structure\CmdAttribute.cs" />
     <Compile Include="Commands\Structure\CmdVariation.cs" />
     <Compile Include="Commands\Structure\Command.cs" />

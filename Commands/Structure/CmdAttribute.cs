@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Matbot.Commands.Structure
 {
-    class CmdAttribute
+    public class CmdAttribute
     {
         public String ParamName { get; private set; }
         public String Name;

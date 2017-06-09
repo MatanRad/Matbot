@@ -21,7 +21,7 @@ namespace Matbot.Commands
 
         public void Execute(Message m,string searchstring)
         {
-            Console.WriteLine("user: " + m.User.Id["telegram"]);
+            Console.WriteLine("user: " + m.User.Id[m.Client.GetClientId()]);
             var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(searchstring);
             string url = YoutubeParser.ParseVidFromName(searchstring).URL;
             m.Reply("I played the following video: " + url);
