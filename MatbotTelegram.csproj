@@ -63,6 +63,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MatbotDiscord\MatbotDiscord.csproj">
+      <Project>{0cb4453b-c9bd-470f-bcb7-cd7f96ed7bf5}</Project>
+      <Name>MatbotDiscord</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Matbot\Matbot.csproj">
       <Project>{1067268e-fefe-4671-a129-766a801f345d}</Project>
       <Name>Matbot</Name>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Matbot.Commands.Structure;
 
 namespace MatbotTelegram
 {
@@ -10,7 +11,7 @@ namespace MatbotTelegram
     {
         static void Main(string[] args)
         {
-            TelegramClient cl = new TelegramClient("220913134:AAHwC-5P5H14sFfx7eDlXYf9qobIx25OFWQ");
+            MatbotDiscord.DiscordClient cl = new MatbotDiscord.DiscordClient("MzEzODI1MzYzMTk5MjYyNzIw.DAJkGQ.kAPnAi6CMbFL1zJDuAVm9mUlf6c", 313825363199262720);
             cl.Start();
             Matbot.ConsoleHider.HideConsole();
             while (true) ;

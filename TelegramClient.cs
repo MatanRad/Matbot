@@ -138,7 +138,7 @@ namespace MatbotTelegram
             return u;
         }
 
-        public override User GetChatMember(ChatId chatId, ulong id)
+        public override User GetChatMemberById(ChatId chatId, ulong id)
         {
             try
             {
