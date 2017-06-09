@@ -20,7 +20,7 @@ namespace Matbot.Commands.Structure
 
         public CommandManager()
         {
-            
+            if (!CommandAllocator.AllocatedShared) CommandAllocator.AllocateShared();
         }
 
         public bool ExecuteUserInput(Matbot.Client.Message msg, string input)
