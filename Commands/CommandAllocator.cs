@@ -9,12 +9,14 @@ namespace Matbot.Commands
 {
     class CommandAllocator
     {
-        public static bool AllocatedShared = false;
+        private static bool allocated = false;
+        public static bool AllocatedShared { get { return allocated; }  }
 
         public static void AllocateShared()
         {
-            if (AllocatedShared) return;
-            AllocatedShared = true;
+            if (allocated) return;
+            allocated = true;
+            CommandManager.SharedManager = new CommandManager();
 
             Matbot.Commands.PlayCommand cmd = new Commands.PlayCommand();
             Matbot.Commands.RegisterCommand cm2 = new Commands.RegisterCommand();

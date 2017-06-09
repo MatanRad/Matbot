@@ -92,6 +92,7 @@
     <Compile Include="Commands\AddCommand.cs" />
     <Compile Include="Commands\AlarmCommand.cs" />
     <Compile Include="Commands\BotConsoleCommand.cs" />
+    <Compile Include="Commands\CommandAllocator.cs" />
     <Compile Include="Commands\FindUserCommand.cs" />
     <Compile Include="Commands\MyIdCommand.cs" />
     <Compile Include="Commands\MyRankCommand.cs" />

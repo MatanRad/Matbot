@@ -9,7 +9,7 @@ namespace Matbot.Commands.Structure
 {
     class CommandManager
     {
-        public static CommandManager SharedManager = new CommandManager();
+        public static CommandManager SharedManager;
 
         private Dictionary<string, Command> Commands = new Dictionary<string, Command>();
 
