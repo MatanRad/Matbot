@@ -9,14 +9,22 @@ using System.Web;
 
 namespace MatbotTelegram
 {
-    class TelegramClient : Matbot.Client.Client
+    public class TelegramClient : Matbot.Client.Client
     {
         Telegram.Bot.TelegramBotClient TClient;
 
         private static string ClientId = "telegram";
         private string Token;
 
-        public TelegramClient(string token)
+        public TelegramClient(string token) :base()
+        {
+            Token = token;
+
+            TClient = new TelegramBotClient(token);
+            TClient.OnUpdate += TClient_OnUpdate;
+        }
+
+        public TelegramClient(string token, UserDatabase db) : base(db)
         {
             Token = token;
 
