@@ -30,6 +30,8 @@ namespace Matbot.Commands
             Matbot.Commands.AlarmCommand cm10 = new Commands.AlarmCommand();
             Matbot.Commands.AddCommand cm11 = new Commands.AddCommand();
             Matbot.Commands.FindUserCommand cm12 = new Commands.FindUserCommand();
+            Matbot.Commands.SayCommand cm13 = new Commands.SayCommand();
+            Matbot.Commands.ChatIdCommand cm14 = new Commands.ChatIdCommand();
             CommandManager.SharedManager.RegisterNewCommand(cmd);
             CommandManager.SharedManager.RegisterNewCommand(cm2);
             CommandManager.SharedManager.RegisterNewCommand(cm3);
@@ -42,6 +44,8 @@ namespace Matbot.Commands
             CommandManager.SharedManager.RegisterNewCommand(cm10);
             CommandManager.SharedManager.RegisterNewCommand(cm11);
             CommandManager.SharedManager.RegisterNewCommand(cm12);
+            CommandManager.SharedManager.RegisterNewCommand(cm13);
+            CommandManager.SharedManager.RegisterNewCommand(cm14);
         }
     }
 }
