@@ -180,11 +180,16 @@ namespace Matbot.Commands.Structure
                         object t = ClassConverter.ConvertToObj(param[i], a.AType);
                         converted.Add(t);
                     }
-                    catch (InvalidCastException)
+                    catch (Exception e)
                     {
-                        failed = true;
-                        converted.Clear();
-                        break;
+                        if (e is InvalidCastException || e is FormatException)
+                        {
+                            System.Diagnostics.Debug.WriteLine(e.GetType().Name);
+                            failed = true;
+                            converted.Clear();
+                            break;
+                        }
+                        else throw e;
                     }
 
                 }
