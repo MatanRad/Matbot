@@ -114,6 +114,7 @@
     <Compile Include="Commands\PlayCommand.cs" />
     <Compile Include="Commands\Structure\SingleStringCommand.cs" />
     <Compile Include="Commands\UpgradeCommand.cs" />
+    <Compile Include="Commands\VolumeCommand.cs" />
     <Compile Include="ConsoleHider.cs" />
     <Compile Include="HttpGetter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
