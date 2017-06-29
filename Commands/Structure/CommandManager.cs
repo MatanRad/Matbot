@@ -46,7 +46,7 @@ namespace Matbot.Commands.Structure
                 if(c)
                 {
                     msg.Reply(p.RawInput);
-                    return false;
+                    return true;
                 }
             }
 
