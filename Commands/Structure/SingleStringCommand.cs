@@ -13,6 +13,7 @@ namespace Matbot.Commands
 
         public override void ReformatInput(ParsedInput input)
         {
+            if (input.Parameters.Length == 0) return;
             string[] a = new string[1];
             a[0] = String.Join(" ", input.Parameters);
             input.Parameters = a;
