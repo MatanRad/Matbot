@@ -16,21 +16,14 @@ namespace MatbotTelegram
         private static string ClientId = "telegram";
         private string Token;
 
-        public TelegramClient(string token) :base()
+        public TelegramClient(Matbot.Bot bot, ClientToken token) :base(bot, token)
         {
-            Token = token;
+            Token = token.Token;
 
-            TClient = new TelegramBotClient(token);
+            TClient = new TelegramBotClient(token.Token);
             TClient.OnUpdate += TClient_OnUpdate;
         }
 
-        public TelegramClient(string token, UserDatabase db) : base(db)
-        {
-            Token = token;
-
-            TClient = new TelegramBotClient(token);
-            TClient.OnUpdate += TClient_OnUpdate;
-        }
 
         public override bool SendMessage(Chat chat, string message)
         {
@@ -82,6 +75,7 @@ namespace MatbotTelegram
 
         public override void Start()
         {
+            Running = true;
             TClient.StartReceiving();
         }
 
@@ -158,6 +152,7 @@ namespace MatbotTelegram
 
         public override void Stop()
         {
+            Running = false;
             TClient.StopReceiving();
         }
 
