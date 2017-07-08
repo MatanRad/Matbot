@@ -5,19 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Matbot.Commands
+namespace Matbot.Commands.Structure
 {
     class CommandAllocator
     {
-        private static bool allocated = false;
-        public static bool AllocatedShared { get { return allocated; }  }
-
-        public static void AllocateShared()
+        public static void AllocateShared(CommandManager SharedManager)
         {
-            if (allocated) return;
-            allocated = true;
-            CommandManager.SharedManager = new CommandManager();
-
             Matbot.Commands.PlayCommand cmd = new Commands.PlayCommand();
             Matbot.Commands.RegisterCommand cm2 = new Commands.RegisterCommand();
             Matbot.Commands.MyRankCommand cm3 = new Commands.MyRankCommand();
@@ -33,21 +26,25 @@ namespace Matbot.Commands
             Matbot.Commands.SayCommand cm13 = new Commands.SayCommand();
             Matbot.Commands.ChatIdCommand cm14 = new Commands.ChatIdCommand();
             Matbot.Commands.VolumeCommand cm15 = new Commands.VolumeCommand();
-            CommandManager.SharedManager.RegisterNewCommand(cmd);
-            CommandManager.SharedManager.RegisterNewCommand(cm2);
-            CommandManager.SharedManager.RegisterNewCommand(cm3);
-            CommandManager.SharedManager.RegisterNewCommand(cm4);
-            CommandManager.SharedManager.RegisterNewCommand(cm5);
-            CommandManager.SharedManager.RegisterNewCommand(cm6);
-            CommandManager.SharedManager.RegisterNewCommand(cm7);
-            CommandManager.SharedManager.RegisterNewCommand(cm8);
-            CommandManager.SharedManager.RegisterNewCommand(cm9);
-            CommandManager.SharedManager.RegisterNewCommand(cm10);
-            CommandManager.SharedManager.RegisterNewCommand(cm11);
-            CommandManager.SharedManager.RegisterNewCommand(cm12);
-            CommandManager.SharedManager.RegisterNewCommand(cm13);
-            CommandManager.SharedManager.RegisterNewCommand(cm14);
-            CommandManager.SharedManager.RegisterNewCommand(cm15);
+            var cm16 = new Commands.ServiceCommand();
+            var cm17 = new Commands.FiveSecondsCommand();
+            SharedManager.RegisterNewCommand(cmd);
+            SharedManager.RegisterNewCommand(cm2);
+            SharedManager.RegisterNewCommand(cm3);
+            SharedManager.RegisterNewCommand(cm4);
+            SharedManager.RegisterNewCommand(cm5);
+            SharedManager.RegisterNewCommand(cm6);
+            SharedManager.RegisterNewCommand(cm7);
+            SharedManager.RegisterNewCommand(cm8);
+            SharedManager.RegisterNewCommand(cm9);
+            SharedManager.RegisterNewCommand(cm10);
+            SharedManager.RegisterNewCommand(cm11);
+            SharedManager.RegisterNewCommand(cm12);
+            SharedManager.RegisterNewCommand(cm13);
+            SharedManager.RegisterNewCommand(cm14);
+            SharedManager.RegisterNewCommand(cm15);
+            SharedManager.RegisterNewCommand(cm16);
+            SharedManager.RegisterNewCommand(cm17);
         }
     }
 }
