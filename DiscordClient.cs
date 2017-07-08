@@ -15,6 +15,7 @@ namespace MatbotDiscord
 
         public static string DiscordID { get { return "discord"; } }
         public ulong ID { get; private set; }
+        private string token;
 
         public override Matbot.Client.User GetChatMemberById(ChatId chatId, ulong id)
         {
@@ -29,6 +30,11 @@ namespace MatbotDiscord
                 }
             }
             return null;
+        }
+
+        public override Chat GetChatById(ChatId id)
+        {
+            return ChatFromDiscordChat(client.GetChannel(id.Ids[DiscordID]));
         }
 
         private Discord.Channel GetChannelByDiscordChatId(DiscordChatId id)
@@ -75,9 +81,9 @@ namespace MatbotDiscord
             return true;
         }
 
-        public DiscordClient(string token, ulong myid) : base()
+        public DiscordClient(Bot bot, DiscordToken token) : base(bot, token)
         {
-            ID = myid;
+            ID = token.myid;
 
             Discord.DiscordConfigBuilder b = new Discord.DiscordConfigBuilder();
             b.AppName = "Matbot";
@@ -85,18 +91,7 @@ namespace MatbotDiscord
             client = new Discord.DiscordClient(b);
 
             client.MessageReceived += C_MessageReceived;
-        }
-
-        public DiscordClient(string token, ulong myid, UserDatabase db) : base(db)
-        {
-            ID = myid;
-
-            Discord.DiscordConfigBuilder b = new Discord.DiscordConfigBuilder();
-            b.AppName = "Matbot";
-
-            client = new Discord.DiscordClient(b);
-
-            client.MessageReceived += C_MessageReceived;
+            this.token = token.Token;
         }
 
         private void C_MessageReceived(object sender, MessageEventArgs e)
@@ -106,13 +101,18 @@ namespace MatbotDiscord
             this.OnMessageReceived(MessageFromEventArgs(e));
         }
 
-        private static DiscordChat ChatFromEventArgs(MessageEventArgs e)
+        private static DiscordChat ChatFromDiscordChat(Discord.Channel e)
         {
             DiscordChat c;
-            if (e.Server==null) c = new DiscordChat(e.Channel.Id, ChatType.Channel);
-            else c = new DiscordChat(e.Server,e.Channel.Id, ChatType.Channel);
-            c.Title = e.Channel.Topic;
+            if (e.Server == null) c = new DiscordChat(e.Id, ChatType.Channel);
+            else c = new DiscordChat(e.Server, e.Id, ChatType.Channel);
+            c.Title = e.Topic;
             return c;
+        }
+
+        private static DiscordChat ChatFromEventArgs(MessageEventArgs e)
+        {
+            return ChatFromDiscordChat(e.Channel);
         }
 
         private Matbot.Client.User UserFromDiscordUser(Discord.User e)
@@ -147,12 +147,14 @@ namespace MatbotDiscord
 
         public override void Start()
         {
-            client.Connect("MzEzODI1MzYzMTk5MjYyNzIw.DAJkGQ.kAPnAi6CMbFL1zJDuAVm9mUlf6c", Discord.TokenType.Bot);
+            Running = true;
+            client.Connect(token, Discord.TokenType.Bot);
             
         }
 
         public override void Stop()
         {
+            Running = false;
             client.Disconnect();
         }
     }

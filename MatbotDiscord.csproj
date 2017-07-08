@@ -64,6 +64,7 @@
     <Compile Include="DiscordChat.cs" />
     <Compile Include="DiscordChatId.cs" />
     <Compile Include="DiscordClient.cs" />
+    <Compile Include="DiscordToken.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
