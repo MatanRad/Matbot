@@ -7,9 +7,9 @@ using Matbot.Commands.Structure.Exceptions;
 
 namespace Matbot.Commands.Structure
 {
-    class CommandManager
+    public class CommandManager
     {
-        public static CommandManager SharedManager;
+        //public static CommandManager SharedManager;
 
         private Dictionary<string, Command> Commands = new Dictionary<string, Command>();
 
@@ -20,7 +20,6 @@ namespace Matbot.Commands.Structure
 
         public CommandManager()
         {
-            if (!CommandAllocator.AllocatedShared) CommandAllocator.AllocateShared();
         }
 
         public bool ExecuteUserInput(Matbot.Client.Message msg, string input)

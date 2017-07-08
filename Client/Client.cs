@@ -9,12 +9,13 @@ namespace Matbot.Client
 {
     public abstract class Client
     {
-        CommandManager CustomCmdManger = new CommandManager();
-        UserDatabase usrDatabase = new UserDatabase();
+        public Bot Bot;
 
-        List<Command> CustomCommands = new List<Command>();
+        protected CommandManager CustomCmdManger = new CommandManager();
 
-        public UserDatabase UsrDatabase { get { return usrDatabase; } private set { usrDatabase = value; } }
+        //public UserDatabase UsrDatabase { get { return usrDatabase; } }
+
+        public bool Running = false;
 
         public abstract void Start();
         public abstract void Stop();
@@ -27,23 +28,19 @@ namespace Matbot.Client
 
             if(!this.CustomCmdManger.ExecuteUserInput(message, parsed))
             {
-                CommandManager.SharedManager.ExecuteUserInput(message, parsed);
+                Bot.SharedManager.ExecuteUserInput(message, parsed);
             }
         }
 
 
-        public Client()
+        public Client(Bot bot, ClientToken token)
         {
-        }
-
-        public Client(UserDatabase database)
-        {
-            UsrDatabase = database;
+            this.Bot = bot;
         }
 
         public virtual void SetUserRank(User user, UserRank rank)
         {
-            UsrDatabase.SetUserRank(user, rank);
+            Bot.UsrDatabase.SetUserRank(user, rank);
         }
 
         public virtual Chat GetChatById(ChatId id)
@@ -85,7 +82,7 @@ namespace Matbot.Client
             User u = new User(this, this.GetClientId(), id);
             try
             {
-                u.BotRank = UsrDatabase.GetUserRank(u);
+                u.BotRank = Bot.UsrDatabase.GetUserRank(u);
             }
             catch(Exceptions.UserNotFoundException) { }
 

@@ -16,19 +16,18 @@ namespace Matbot.Client
     {
         List<User> users = new List<User>();
 
+        string FilePath;
+
         public UserDatabase()
         {
-            /*XmlSerializer serializer = new XmlSerializer(typeof(List<User>));
-            using (var sww = new StreamReader("users.xml"))
-            {
-                using (XmlReader reader = XmlReader.Create(sww))
-                {
-                    users = serializer.Deserialize(reader) as List<User>;
-                }
-            }*/
+        }
+
+        public UserDatabase(string path)
+        {
+            FilePath = path;
             try
             {
-                using (var ms = new FileStream("users.xml", FileMode.Open))
+                using (var ms = new FileStream(FilePath, FileMode.Open))
                 {
                     var set = new BinaryFormatter();
                     users = set.Deserialize(ms) as List<User>;
@@ -36,8 +35,6 @@ namespace Matbot.Client
             }
             catch (FileNotFoundException) { }
             catch (SerializationException) { }
-            
-            
         }
 
         public User FindUserById(string client, ulong id, Client c = null)
@@ -138,16 +135,8 @@ namespace Matbot.Client
 
         private void SaveChanges()
         {
-            /*XmlSerializer serializer = new XmlSerializer(typeof(List<User>));
-            using (var sww = new StreamWriter("users.xml"))
-            {
-                using (XmlWriter writer = XmlWriter.Create(sww))
-                {
-                    serializer.Serialize(writer, users);
-                }
-            }*/
-
-            using (var ms = new FileStream("users.xml", FileMode.Create))
+            if (FilePath == null) return;
+            using (var ms = new FileStream(FilePath, FileMode.Create))
             {
                 var set = new BinaryFormatter();
                 set.Serialize(ms, users);
