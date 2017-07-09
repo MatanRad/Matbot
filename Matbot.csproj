@@ -141,6 +141,10 @@
       <Name>YoutubeExtractor</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\FFmpeg.Win64.Static.3.2.2.1\build\FFmpeg.Win64.Static.targets" Condition="Exists('..\packages\FFmpeg.Win64.Static.3.2.2.1\build\FFmpeg.Win64.Static.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
