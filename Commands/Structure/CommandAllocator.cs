@@ -28,6 +28,7 @@ namespace Matbot.Commands.Structure
             Matbot.Commands.VolumeCommand cm15 = new Commands.VolumeCommand();
             var cm16 = new Commands.ServiceCommand();
             var cm17 = new Commands.FiveSecondsCommand();
+            var cm18 = new Commands.PyScriptCommand();
             SharedManager.RegisterNewCommand(cmd);
             SharedManager.RegisterNewCommand(cm2);
             SharedManager.RegisterNewCommand(cm3);
@@ -45,6 +46,7 @@ namespace Matbot.Commands.Structure
             SharedManager.RegisterNewCommand(cm15);
             SharedManager.RegisterNewCommand(cm16);
             SharedManager.RegisterNewCommand(cm17);
+            SharedManager.RegisterNewCommand(cm18);
         }
     }
 }
