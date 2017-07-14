@@ -13,7 +13,6 @@ namespace Matbot.Services
         public WonderboyzService(Bot bot) : base(bot)
         {
             ElapseTime = new TimeSpan(0, 01, 0);
-            ElapseTimeActivated = true;
         }
 
         public override void Elapsed()

@@ -96,6 +96,8 @@
     <Compile Include="Commands\BotConsoleCommand.cs" />
     <Compile Include="Commands\ChatIdCommand.cs" />
     <Compile Include="Commands\FiveSecondsCommand.cs" />
+    <Compile Include="Commands\PyScriptCommand.cs" />
+    <Compile Include="Commands\ScreenSaverCommand.cs" />
     <Compile Include="Commands\ServiceCommand.cs" />
     <Compile Include="Commands\Structure\CommandAllocator.cs" />
     <Compile Include="Commands\FindUserCommand.cs" />
@@ -127,6 +129,7 @@
     <Compile Include="Services\Exceptions\UserNotRegisteredException.cs" />
     <Compile Include="Services\FiveSecondCounterService.cs" />
     <Compile Include="Services\RegisterableService.cs" />
+    <Compile Include="Services\PyScriptService.cs" />
     <Compile Include="Services\Service.cs" />
     <Compile Include="Services\Exceptions\UserAlreadyRegisteredException.cs" />
     <Compile Include="Services\ServiceAllocator.cs" />

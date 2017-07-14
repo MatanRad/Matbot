@@ -13,16 +13,20 @@ namespace Matbot.Services
         [NonSerialized]
         public Bot bot;
 
+        TimeSpan elapseEvery;
+        DateTime elapseDate;
+        TimeSpan elapseTime;
+
         public DateTime LastElapse = DateTime.MinValue;
-        public TimeSpan ElapseEvery;
-        public DateTime ElapseDate;
-        public TimeSpan ElapseTime;
+        public TimeSpan ElapseEvery { get { return elapseEvery; } set { ElapseEveryActivated = true; elapseEvery = value; } }
+        public DateTime ElapseDate { get { return elapseDate; } set { ElapseDateActivated = true; elapseDate = value; } }
+        public TimeSpan ElapseTime { get { return elapseTime; } set { ElapseTimeActivated = true; elapseTime = value; } }
 
-        public bool ElapseEveryActivated = false;
-        public bool ElapseDateActivated = false;
-        public bool ElapseTimeActivated = false;
+        bool ElapseEveryActivated = false;
+        bool ElapseDateActivated = false;
+        bool ElapseTimeActivated = false;
 
-        bool ElapseOnce = false;
+        public bool ElapseOnce = false;
 
         public readonly string Desc = "";
 
@@ -33,6 +37,12 @@ namespace Matbot.Services
         public Service(Bot bot)
         {
             this.bot = bot;
+        }
+
+        public Service(Bot bot, string Desc)
+        {
+            this.bot = bot;
+            this.Desc = Desc;
         }
 
         public virtual void Start()

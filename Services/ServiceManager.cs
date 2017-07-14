@@ -65,7 +65,7 @@ namespace Matbot.Services
             }
 
             ServiceAllocator.AllocateStartupServices(bot,RunningServices, this);
-            timer.Change(0, FindLowestInterval());
+            timer.Change(FindLowestInterval(), FindLowestInterval());
         }
 
         public Service FindServiceByID(int id)
@@ -107,12 +107,12 @@ namespace Matbot.Services
             return nid;
         }
 
-        public bool RegisterNewService(Service s)
+        public int RegisterNewService(Service s)
         {
             s.ID = GetNewID();
             RunningServices.Add(s);
-            timer.Change(0, FindLowestInterval());
-            return true;
+            timer.Change(FindLowestInterval(), FindLowestInterval());
+            return s.ID;
         }
 
         void ManageServices(object CallInfo)

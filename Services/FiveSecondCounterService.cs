@@ -13,7 +13,6 @@ namespace Matbot.Services
         public FiveSecondCounterService(Bot bot) : base(bot)
         {
             ElapseEvery = new TimeSpan(0, 0, 5);
-            ElapseEveryActivated = true;
         }
 
         public override void Elapsed()

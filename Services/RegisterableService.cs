@@ -20,8 +20,13 @@ namespace Matbot.Services
         public Client.UserRank RequiredRank = Client.UserRank.User;
 
         protected List<ChatId> Registered = new List<ChatId>();
+        private string file;
 
         public RegisterableService(Bot bot) : base(bot)
+        {
+        }
+
+        public RegisterableService(Bot bot, string desc) : base(bot,desc)
         {
         }
 
