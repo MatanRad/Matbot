@@ -17,7 +17,7 @@ namespace Matbot.Services
 
         public override void Elapsed()
         {
-            foreach (ChatId i in Registered) bot.BroadcastMessage(i, (DateTime.Now.Subtract(new DateTime(2017, 4, 7)).TotalDays % 2 == 0 ? "Matan" : "Pikh") + " is gay today!" );
+            foreach (ChatId i in Registered) bot.BroadcastMessage(i, (DateTime.Today.Subtract(new DateTime(2017, 4, 7)).TotalDays % 2 == 0 ? "Matan" : "Pikh") + " is gay today!" );
         }
     }
 }
