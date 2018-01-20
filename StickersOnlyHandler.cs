@@ -34,7 +34,7 @@ namespace MatbotTelegram
 
         public bool ShouldHandle(Message m)
         {
-            return m.Type != MessageType.StickerMessage && m.Client != null && m.Chat.TelegramId() == id;
+            return m.Type != MessageType.StickerMessage && m.Type != MessageType.PhotoMessage && m.Client != null && m.Chat.TelegramId() == id;
         }
 
         public void Stop()
