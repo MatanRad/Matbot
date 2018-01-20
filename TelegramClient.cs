@@ -6,6 +6,7 @@ using Matbot.Client;
 using System.Threading.Tasks;
 using Telegram.Bot;
 using System.Web;
+using System.Net;
 
 namespace MatbotTelegram
 {
@@ -22,12 +23,36 @@ namespace MatbotTelegram
 
             TClient = new TelegramBotClient(token.Token);
             TClient.OnUpdate += TClient_OnUpdate;
+
+            CustomCmdManger.RegisterNewCommand(new StickersOnlyCommand());
         }
 
 
         public override bool SendMessage(Chat chat, string message)
         {
             TClient.SendTextMessageAsync((long)chat.TelegramId(), message);
+            return true;
+        }
+
+        public override bool DeleteMessage(Message m)
+        {
+            Chat chat = m.Chat;
+            try
+            {
+                using (var httpclient = new System.Net.Http.HttpClient())
+                {
+
+                    var uri = "https://api.telegram.org/bot" + Token + "/deleteMessage?chat_id=" + (long)chat.TelegramId() + "&message_id=" + (int)m.TelegramId();
+
+
+                    WebClient c = new WebClient();
+                    c.DownloadString(uri);
+                }
+            }
+            catch
+            {
+                return false;
+            }
             return true;
         }
 
@@ -61,7 +86,7 @@ namespace MatbotTelegram
             return true;
         }
 
-        public override Chat GetChatById(ChatId id)
+        public override Chat GetChatById(ChatItemId id)
         {
             return FromTelegramChat(TClient.GetChatAsync((long)id.Ids[GetClientId()]).Result);
         }
@@ -92,7 +117,10 @@ namespace MatbotTelegram
         public Message FromTelegramMessage(Telegram.Bot.Types.Message message)
         {
             if (message == null) return null;
-            Message m = new Message(this, FromTelegramChat(message.Chat), FromTelegramUser(message.From), message.Text);
+            ChatItemId id = new ChatItemId("telegram", (ulong)message.MessageId);
+            Message m = new Message(this, FromTelegramChat(message.Chat), FromTelegramUser(message.From), message.Text, 
+                id, FromTelegramMessageType(message.Type));
+         
 
             return m;
         }
@@ -111,6 +139,31 @@ namespace MatbotTelegram
                     return ChatType.Supergroup;
                 default:
                     return ChatType.Unknown;
+            }
+        }
+
+        public static MessageType FromTelegramMessageType(Telegram.Bot.Types.Enums.MessageType type)
+        {
+            switch (type)
+            {
+                case Telegram.Bot.Types.Enums.MessageType.AudioMessage:
+                    return MessageType.AudioMessage;
+                case Telegram.Bot.Types.Enums.MessageType.ContactMessage:
+                    return MessageType.ContactMessage;
+                case Telegram.Bot.Types.Enums.MessageType.DocumentMessage:
+                    return MessageType.DocumentMessage;
+                case Telegram.Bot.Types.Enums.MessageType.LocationMessage:
+                    return MessageType.LocationMessage;
+                case Telegram.Bot.Types.Enums.MessageType.PhotoMessage:
+                    return MessageType.PhotoMessage;
+                case Telegram.Bot.Types.Enums.MessageType.StickerMessage:
+                    return MessageType.StickerMessage;
+                case Telegram.Bot.Types.Enums.MessageType.TextMessage:
+                    return MessageType.TextMessage;
+                case Telegram.Bot.Types.Enums.MessageType.VoiceMessage:
+                    return MessageType.VoiceMessage;
+                default:
+                    return MessageType.Unknown;
             }
         }
 
@@ -140,7 +193,7 @@ namespace MatbotTelegram
             return u;
         }
 
-        public override User GetChatMemberById(ChatId chatId, ulong id)
+        public override User GetChatMemberById(ChatItemId chatId, ulong id)
         {
             try
             {

@@ -13,5 +13,10 @@ namespace MatbotTelegram
         {
             return chat.Id.Ids["telegram"];
         }
+
+        public static ulong TelegramId(this Message m)
+        {
+            return m.Id.Ids["telegram"];
+        }
     }
 }
