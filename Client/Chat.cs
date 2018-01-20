@@ -19,7 +19,7 @@ namespace Matbot.Client
 
     public class Chat
     {
-        public ChatId Id { get; private set; }
+        public ChatItemId Id { get; private set; }
         public string Title { get; set; }
 
         public ChatType Type { get; set; }
@@ -32,10 +32,10 @@ namespace Matbot.Client
         public Chat(string clientId, ulong id, ChatType type)
         {
             Type = type;
-            Id = new ChatId(clientId, id);
+            Id = new ChatItemId(clientId, id);
         }
 
-        public Chat(ChatId id, ChatType type)
+        public Chat(ChatItemId id, ChatType type)
         {
             Type = type;
             Id = id;

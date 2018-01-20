@@ -17,7 +17,7 @@ namespace Matbot.Services
 
         public override void Elapsed()
         {
-            foreach(ChatId c in Registered)
+            foreach(ChatItemId c in Registered)
             {
                 bot.BroadcastMessage(c, "5 seconds!");
             }

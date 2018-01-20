@@ -66,14 +66,14 @@ namespace Matbot.Client
             return FindUserIndexById(client, id)!=-1;
         }
 
-        public User FindUserById(ChatId id, Client c = null)
+        public User FindUserById(ChatItemId id, Client c = null)
         {
             int i = FindUserIndexById(id);
             if (i != -1) users[i].SetClient(c);
             return (i == -1 ? null : users[i]);
         }
 
-        private int FindUserIndexById(ChatId id, Client c = null)
+        private int FindUserIndexById(ChatItemId id, Client c = null)
         {
             foreach (KeyValuePair<string, ulong> e in id.Ids)
             {
@@ -88,7 +88,7 @@ namespace Matbot.Client
             return -1;
         }
 
-        public bool UserExists(ChatId id)
+        public bool UserExists(ChatItemId id)
         {
             return FindUserIndexById(id) != -1;
         }

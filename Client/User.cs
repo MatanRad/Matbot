@@ -19,7 +19,7 @@ namespace Matbot.Client
     [Serializable]
     public class User
     {
-        public ChatId Id { get; private set; }
+        public ChatItemId Id { get; private set; }
         public string Username;
 
         [NonSerialized]
@@ -30,7 +30,7 @@ namespace Matbot.Client
 
         public User(string clientId, ulong id)
         {
-            Id = new ChatId(clientId, id);
+            Id = new ChatItemId(clientId, id);
         }
 
         private User() { }
@@ -42,7 +42,7 @@ namespace Matbot.Client
 
         public User(Client c, string clientId, ulong id)
         {
-            Id = new ChatId(clientId, id);
+            Id = new ChatItemId(clientId, id);
             Client = c;
         }
 

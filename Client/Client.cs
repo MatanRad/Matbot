@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Matbot.Commands.Structure;
-
+using Matbot.Handlers.Structure;
 namespace Matbot.Client
 {
     public abstract class Client
@@ -12,6 +12,7 @@ namespace Matbot.Client
         public Bot Bot;
 
         protected CommandManager CustomCmdManger = new CommandManager();
+        protected HandlerManager CustomHndManager = new HandlerManager();
 
         //public UserDatabase UsrDatabase { get { return usrDatabase; } }
 
@@ -22,16 +23,32 @@ namespace Matbot.Client
 
         public abstract string GetClientId();
 
+        public virtual void RegisterHandler(IHandler h)
+        {
+            CustomHndManager.Register(h);
+        }
+
         public virtual void OnMessageReceived(Message message)
         {
             ParsedInput parsed = new ParsedInput(message.Text);
-
-            if(!this.CustomCmdManger.ExecuteUserInput(message, parsed))
+            if(parsed.IsCommand)
             {
-                Bot.SharedManager.ExecuteUserInput(message, parsed);
+                if (!this.CustomCmdManger.ExecuteUserInput(message, parsed))
+                {
+                    Bot.SharedManager.ExecuteUserInput(message, parsed);
+                }
+            }
+            else
+            {
+                CustomHndManager.MessageReceieved(message);
+                Bot.SharedHndManager.MessageReceieved(message);
             }
         }
 
+        public List<IHandler> GetHandlers()
+        {
+            return CustomHndManager.handlers;
+        }
 
         public Client(Bot bot, ClientToken token)
         {
@@ -43,12 +60,12 @@ namespace Matbot.Client
             Bot.UsrDatabase.SetUserRank(user, rank);
         }
 
-        public virtual Chat GetChatById(ChatId id)
+        public virtual Chat GetChatById(ChatItemId id)
         {
             throw new NotImplementedException("GetChatById functionality not implemented in bot client with id: " + GetClientId());
         }
 
-        public virtual bool SendMessage(ChatId id, string message)
+        public virtual bool SendMessage(ChatItemId id, string message)
         {
             Chat c = GetChatById(id);
             if (c == null) c= new Chat(id, ChatType.Unknown);
@@ -56,7 +73,7 @@ namespace Matbot.Client
             return this.SendMessage(c, message);
         }
 
-        public virtual bool SendMessage(ChatId id, FormattedMessage message)
+        public virtual bool SendMessage(ChatItemId id, FormattedMessage message)
         {
             Chat c = GetChatById(id);
             if (c == null) c = new Chat(id, ChatType.Unknown);
@@ -77,6 +94,11 @@ namespace Matbot.Client
             throw new NotImplementedException("SendAudioMessage functionality not implemented in bot client with id: " + GetClientId());
         }
 
+        public virtual bool DeleteMessage(Message m)
+        {
+            throw new NotImplementedException("DeleteMessage functionality not implemented in bot client with id: " + GetClientId());
+        }
+
         public virtual User GetNewUser(ulong id)
         {
             User u = new User(this, this.GetClientId(), id);
@@ -90,12 +112,12 @@ namespace Matbot.Client
             return u;
         }
 
-        public virtual User GetChatMemberById(ChatId chatId,ulong id)
+        public virtual User GetChatMemberById(ChatItemId chatId,ulong id)
         {
             throw new NotImplementedException("GetChatMember functionality not implemented in bot client with id: " + GetClientId());
         }
 
-        public virtual User GetChatMemberByUsername(ChatId chatId, string username, bool exactMatch = true)
+        public virtual User GetChatMemberByUsername(ChatItemId chatId, string username, bool exactMatch = true)
         {
             throw new NotImplementedException("GetChatMemberByUsername functionality not implemented in bot client with id: " + GetClientId());
         }

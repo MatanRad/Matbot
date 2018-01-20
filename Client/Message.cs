@@ -14,12 +14,15 @@ namespace Matbot.Client
         DocumentMessage,
         PhotoMessage,
         StickerMessage,
-        LocationMessage
+        LocationMessage,
+        ContactMessage,
+        Unknown
     }
 
 
     public class Message
     {
+        public ChatItemId Id;
         public Chat Chat { get; private set; }
         public User User { get; private set; }
         public string Text { get; private set; }
@@ -30,19 +33,23 @@ namespace Matbot.Client
 
         public readonly Client Client = null;
 
-        public Message(Chat chat, User user, string text)
+        public Message(Chat chat, User user, string text, ChatItemId id=null, MessageType type = MessageType.Unknown)
         {
             Chat = chat;
             User = user;
             Text = text;
+            Id = id;
+            Type = type;
         }
 
-        public Message(Client client, Chat chat, User user, string text)
+        public Message(Client client, Chat chat, User user, string text, ChatItemId id = null, MessageType type = MessageType.Unknown)
         {
             Chat = chat;
             User = user;
             Text = text;
             Client = client;
+            Id = id;
+            Type = type;
         }
 
         public bool Reply(string message)

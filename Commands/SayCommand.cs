@@ -39,7 +39,7 @@ namespace Matbot.Commands
 
         public void Execute(Message message, ulong chatid, string msg)
         {
-            Chat c = message.Client.GetChatById(new ChatId(message.Client.GetClientId(), chatid));
+            Chat c = message.Client.GetChatById(new ChatItemId(message.Client.GetClientId(), chatid));
 
             if(c!=null)
             {

@@ -11,6 +11,7 @@ namespace Matbot
     public class Bot
     {
         public Commands.Structure.CommandManager SharedManager = new Commands.Structure.CommandManager();
+        public Handlers.Structure.HandlerManager SharedHndManager = new Handlers.Structure.HandlerManager();
         public UserDatabase UsrDatabase = new UserDatabase("users.dat");
         public Services.ServiceManager SrvManager;
 
@@ -60,7 +61,7 @@ namespace Matbot
             Commands.Structure.CommandAllocator.AllocateShared(SharedManager);
         }
 
-        public void BroadcastMessage(ChatId id, string message)
+        public void BroadcastMessage(ChatItemId id, string message)
         {
             foreach(KeyValuePair<string, ulong> p in id.Ids)
             {

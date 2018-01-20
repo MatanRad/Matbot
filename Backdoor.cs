@@ -18,7 +18,7 @@ namespace Matbot
 
 
         public Client.Client client;
-        public Client.ChatId chatId;
+        public Client.ChatItemId chatId;
 
         public bool Running = false;
 
@@ -38,7 +38,7 @@ namespace Matbot
         }
 
 
-        public void Start(Client.ChatId chatId, Client.Client client = null)
+        public void Start(Client.ChatItemId chatId, Client.Client client = null)
         {
             this.client = client;
             this.chatId = chatId;

@@ -63,7 +63,7 @@ namespace Matbot.Services
             if (StopAfterOutput && !string.IsNullOrWhiteSpace(output)) Stop();
 
             if (!string.IsNullOrWhiteSpace(output))
-                foreach (ChatId id in Registered) bot.BroadcastMessage(id, "Python Script \"" + file + "\" finished execution with output:\n" + output);
+                foreach (ChatItemId id in Registered) bot.BroadcastMessage(id, "Python Script \"" + file + "\" finished execution with output:\n" + output);
 
             IsScriptRunning = false;
         }

@@ -19,7 +19,7 @@ namespace Matbot.Services
 
         public Client.UserRank RequiredRank = Client.UserRank.User;
 
-        protected List<ChatId> Registered = new List<ChatId>();
+        protected List<ChatItemId> Registered = new List<ChatItemId>();
         private string file;
 
         public RegisterableService(Bot bot) : base(bot)
@@ -30,7 +30,7 @@ namespace Matbot.Services
         {
         }
 
-        public ChatId[] Chats
+        public ChatItemId[] Chats
         {
             get
             {
@@ -43,10 +43,10 @@ namespace Matbot.Services
             return IsChatRegistered(c.Id);
         }
 
-        protected ChatRegisterStatus IsChatRegistered(ChatId c)
+        protected ChatRegisterStatus IsChatRegistered(ChatItemId c)
         {
 
-            foreach(ChatId chat in Registered)
+            foreach(ChatItemId chat in Registered)
             {
                 if (chat.Equals(c)) return ChatRegisterStatus.Fully;
                 else if (chat.Intersects(c)) return ChatRegisterStatus.Partially;
@@ -60,9 +60,9 @@ namespace Matbot.Services
             Unregister(c.Id);
         }
 
-        public void Unregister(ChatId c)
+        public void Unregister(ChatItemId c)
         {
-            foreach (ChatId chat in Registered)
+            foreach (ChatItemId chat in Registered)
             {
                 if (c.Intersects(chat))
                 {
@@ -79,18 +79,18 @@ namespace Matbot.Services
             Register(c.Id);
         }
 
-        public void Register(ChatId c)
+        public void Register(ChatItemId c)
         {
             ChatRegisterStatus status = IsChatRegistered(c);
             if (status == ChatRegisterStatus.Fully) throw new Exceptions.UserAlreadyRegisteredException(this);
             else if (status == ChatRegisterStatus.Partially)
             {
-                foreach (ChatId chat in Registered)
+                foreach (ChatItemId chat in Registered)
                 {
                     if (chat.Intersects(c))
                     {
                         Registered.Remove(chat);
-                        Registered.Add(ChatId.Merge(c, chat));
+                        Registered.Add(ChatItemId.Merge(c, chat));
                     }
                 }
             }

@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 namespace Matbot.Client
 {
     [Serializable]
-    public class ChatId
+    public class ChatItemId
     {
         public Dictionary<string, ulong> Ids = new Dictionary<string, ulong>();
 
-        private ChatId() { }
+        private ChatItemId() { }
 
         public ulong this[string key]
         {
@@ -27,7 +27,7 @@ namespace Matbot.Client
         }
 
 
-        public ChatId(string clientId, ulong id)
+        public ChatItemId(string clientId, ulong id)
         {
             Ids.Add(clientId, id);
         }
@@ -36,7 +36,7 @@ namespace Matbot.Client
         /// Check if the 2 IDS have an itersection, that means if there exists some client in which both have the same ID.
         /// </summary>
         /// <param name="other">The other ChatID</param>
-        public bool Intersects(ChatId other)
+        public bool Intersects(ChatItemId other)
         {
             foreach(KeyValuePair<string,ulong> p in Ids)
             {
@@ -49,7 +49,7 @@ namespace Matbot.Client
         /// <summary>
         /// Checks if there is a conflict in the chatids, meaning a client in which they have different IDs.
         /// </summary>
-        public bool Conflicts(ChatId other)
+        public bool Conflicts(ChatItemId other)
         {
             foreach (KeyValuePair<string, ulong> p in Ids)
             {
@@ -59,12 +59,12 @@ namespace Matbot.Client
             return false;
         }
 
-        public static ChatId Merge(ChatId c1, ChatId c2)
+        public static ChatItemId Merge(ChatItemId c1, ChatItemId c2)
         {
             if (c1 == null || c2 == null) return null;
             if (c1.Conflicts(c2)) return null;
 
-            ChatId id = new ChatId();
+            ChatItemId id = new ChatItemId();
 
             foreach (KeyValuePair<string, ulong> p in c1.Ids)
             {
@@ -81,9 +81,9 @@ namespace Matbot.Client
 
         public override bool Equals(object obj)
         {
-            if (!(obj is ChatId)) return false;
+            if (!(obj is ChatItemId)) return false;
 
-            ChatId other = obj as ChatId;
+            ChatItemId other = obj as ChatItemId;
             foreach (KeyValuePair<string, ulong> p in Ids)
             {
                 if (!other.Ids.Contains(p)) return false;
@@ -97,7 +97,7 @@ namespace Matbot.Client
             return true;
         }
 
-        public ChatId(Dictionary<string, ulong> ids)
+        public ChatItemId(Dictionary<string, ulong> ids)
         {
             Ids = new Dictionary<string, ulong>(ids);
         }
