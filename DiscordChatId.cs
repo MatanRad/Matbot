@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MatbotDiscord
 {
-    class DiscordChatId : Matbot.Client.ChatId
+    class DiscordChatId : Matbot.Client.ChatItemId
     {
         public DiscordChatId(ulong id) : base(DiscordClient.DiscordID,id)
         {

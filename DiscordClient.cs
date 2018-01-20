@@ -17,7 +17,7 @@ namespace MatbotDiscord
         public ulong ID { get; private set; }
         private string token;
 
-        public override Matbot.Client.User GetChatMemberById(ChatId chatId, ulong id)
+        public override Matbot.Client.User GetChatMemberById(ChatItemId chatId, ulong id)
         {
             DiscordChatId chat = (DiscordChatId)chatId;
             Discord.Server s = client.GetServer(chat.ServerID);
@@ -32,7 +32,7 @@ namespace MatbotDiscord
             return null;
         }
 
-        public override Chat GetChatById(ChatId id)
+        public override Chat GetChatById(ChatItemId id)
         {
             return ChatFromDiscordChat(client.GetChannel(id.Ids[DiscordID]));
         }
@@ -59,7 +59,7 @@ namespace MatbotDiscord
             return null;
         }
 
-        public override Matbot.Client.User GetChatMemberByUsername(ChatId chatId, string username, bool exactMatch=true)
+        public override Matbot.Client.User GetChatMemberByUsername(ChatItemId chatId, string username, bool exactMatch=true)
         {
             var c = GetChannelByDiscordChatId((DiscordChatId)chatId);
             var u = c.FindUsers(username, exactMatch);
@@ -71,7 +71,7 @@ namespace MatbotDiscord
             return null;
         }
 
-        public override bool SendMessage(ChatId id, string message)
+        public override bool SendMessage(ChatItemId id, string message)
         {
             Discord.Channel c = GetChannelByDiscordChatId(id as DiscordChatId);
             if (c == null) return false;
