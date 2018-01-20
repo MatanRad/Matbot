@@ -17,6 +17,7 @@ namespace MatbotTelegram
     {
         public StickersOnlyCommand() : base("stickersonly")
         {
+            this.RequiredRank = UserRank.Admin;
         }
 
         public void Execute(Message message, StickersOnlyParam param)
