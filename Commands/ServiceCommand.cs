@@ -25,7 +25,7 @@ namespace Matbot.Commands
 
         public override void Execute(Message message)
         {
-            message.Reply("Running Services:\n" + message.Client.Bot.SrvManager.GetAllServicesString());
+            message.Reply("Running Services:\n" + message.Client.Bot.SrvManager.GetAllServicesString(message.Chat.Id));
         }
 
         public void Execute(Message m, ServiceCMD cmd, int serviceId)

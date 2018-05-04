@@ -22,6 +22,16 @@ namespace Matbot.Services
         protected List<ChatItemId> Registered = new List<ChatItemId>();
         private string file;
 
+        public override string ToString(Matbot.Client.ChatItemId chatId)
+        {
+            string s = base.ToString();
+
+            if (IsChatRegistered(chatId) != ChatRegisterStatus.Empty) s += "    *R*";
+            else s += "    R";
+
+            return s;
+        }
+
         public RegisterableService(Bot bot) : base(bot)
         {
         }

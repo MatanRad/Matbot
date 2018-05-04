@@ -75,11 +75,11 @@ namespace Matbot.Services
                     return true;
                 }
             }
-
+            
             if (ElapseTimeActivated)
             {
                 //if (DateTime.MinValue.Equals(LastElapse)) return true;
-                if ((DateTime.Now.TimeOfDay >= ElapseTime && LastElapse.Day < DateTime.Now.Day))
+                if ((DateTime.Now.TimeOfDay >= ElapseTime && LastElapse.Date < DateTime.Now.Date))
                 {
                     if (ElapseOnce) Stop();
                     return true;
@@ -96,6 +96,11 @@ namespace Matbot.Services
             int idlen = bot.SrvManager.MaxIDNum.ToString().Length;
 
             return ID.ToString("D" + idlen) + "    " + GetType().Name + (string.IsNullOrEmpty(Desc) ? "" : " (" + Desc + ")");
+        }
+
+        public virtual string ToString(Matbot.Client.ChatItemId chatId)
+        {
+            return ToString();
         }
     }
 }
