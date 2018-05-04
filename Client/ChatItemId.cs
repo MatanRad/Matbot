@@ -101,5 +101,17 @@ namespace Matbot.Client
         {
             Ids = new Dictionary<string, ulong>(ids);
         }
+
+        public override string ToString()
+        {
+            string s = "{";
+            foreach (KeyValuePair<string, ulong> kv in Ids)
+            {
+                s += kv.Key + " : " + kv.Value.ToString() + ", ";
+            }
+            s += "};";
+
+            return s;
+        }
     }
 }
