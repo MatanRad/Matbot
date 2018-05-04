@@ -30,19 +30,22 @@ namespace Matbot.Client
 
         public virtual void OnMessageReceived(Message message)
         {
-            ParsedInput parsed = new ParsedInput(message.Text);
-            if(parsed.IsCommand)
+            if (message.Type == MessageType.TextMessage)
             {
-                if (!this.CustomCmdManger.ExecuteUserInput(message, parsed))
+                ParsedInput parsed = new ParsedInput(message.Text);
+                if (parsed.IsCommand)
                 {
-                    Bot.SharedManager.ExecuteUserInput(message, parsed);
+                    if (!this.CustomCmdManger.ExecuteUserInput(message, parsed))
+                    {
+                        Bot.SharedManager.ExecuteUserInput(message, parsed);
+                    }
+                    return;
                 }
             }
-            else
-            {
-                CustomHndManager.MessageReceieved(message);
-                Bot.SharedHndManager.MessageReceieved(message);
-            }
+            
+            CustomHndManager.MessageReceieved(message);
+            Bot.SharedHndManager.MessageReceieved(message);
+            
         }
 
         public List<IHandler> GetHandlers()
