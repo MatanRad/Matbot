@@ -26,6 +26,8 @@ namespace Matbot.Client
         public Chat Chat { get; private set; }
         public User User { get; private set; }
         public string Text { get; private set; }
+        public Audio audio = null;
+        public Voice voice = null;
         public Message AReplyTo;
 
         public MessageType Type { get; private set; }
