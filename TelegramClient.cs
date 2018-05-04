@@ -16,6 +16,11 @@ namespace MatbotTelegram
 
         private static string ClientId = "telegram";
         private string Token;
+        private static Telegram.Bot.Types.Enums.MessageType[] SupportedTypes = {
+            Telegram.Bot.Types.Enums.MessageType.TextMessage,
+            Telegram.Bot.Types.Enums.MessageType.VoiceMessage,
+            Telegram.Bot.Types.Enums.MessageType.AudioMessage
+        };
 
         public TelegramClient(Matbot.Bot bot, ClientToken token) :base(bot, token)
         {
@@ -107,11 +112,11 @@ namespace MatbotTelegram
         private void TClient_OnUpdate(object sender, Telegram.Bot.Args.UpdateEventArgs e)
         {
             Telegram.Bot.Types.Update u = e.Update;
-            if (u.Message.Type != Telegram.Bot.Types.Enums.MessageType.TextMessage) return;
+            if (!SupportedTypes.Contains(u.Message.Type)) return;
             string text = u.Message.Text;
             Console.WriteLine("Message received: " + text);
             this.OnMessageReceived(FromTelegramMessage(e.Update.Message));
-            
+
         }
 
         public Message FromTelegramMessage(Telegram.Bot.Types.Message message)
@@ -120,9 +125,41 @@ namespace MatbotTelegram
             ChatItemId id = new ChatItemId("telegram", (ulong)message.MessageId);
             Message m = new Message(this, FromTelegramChat(message.Chat), FromTelegramUser(message.From), message.Text, 
                 id, FromTelegramMessageType(message.Type));
-         
+            m.voice = FromTelegramVoice(message.Voice);
+            m.audio = FromTelegramAudio(message.Audio);
 
             return m;
+        }
+
+        public Audio FromTelegramAudio(Telegram.Bot.Types.Audio v)
+        {
+            if (v == null) return null;
+            
+            System.IO.Stream stream = v.FileStream;
+            if (stream == null)
+            {
+                Telegram.Bot.Types.File f = TClient.GetFileAsync(v.FileId).Result;
+                stream = f.FileStream;
+            }
+
+            Audio audio = new Audio(v.Title, v.Performer, v.Duration, stream);
+
+            return audio;
+        }
+
+        public Voice FromTelegramVoice(Telegram.Bot.Types.Voice v)
+        {
+            if (v == null) return null;
+            Voice voice = new Voice(Voice.VoiceAudioType.OggOpus);
+            if (v.FileStream == null)
+            {
+                Telegram.Bot.Types.File f = TClient.GetFileAsync(v.FileId).Result;
+                voice.AudioStream = f.FileStream;
+            }
+            else voice.AudioStream = v.FileStream;
+            voice.Duration = v.Duration;
+            
+            return voice;
         }
 
         public static ChatType FromTelegramChatType(Telegram.Bot.Types.Enums.ChatType type)
