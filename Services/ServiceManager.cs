@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using System.Threading;
+using System.Timers;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -34,18 +33,31 @@ namespace Matbot.Services
 
         public ServiceManager(Bot bot)
         {
-            timer = new Timer(ManageServices);
+            StartTimer();
             MaxIDNum = 50000;
 
             ServiceAllocator.AllocateStartupServices(bot,RunningServices, this);
+        }
+
+        private void StartTimer()
+        {
+            if (timer == null)
+            {
+                timer = new Timer();
+                timer.Elapsed += ManageServices;
+                timer.AutoReset = false;
+                timer.Interval = FindLowestInterval();
+            }
+
+            timer.Start();
+
         }
 
         public ServiceManager(Bot bot, string path)
         {
             MaxIDNum = 50000;
             FilePath = path;
-            timer = new Timer(ManageServices);
-
+            StartTimer();
             try
             {
                 using (var ms = new FileStream(FilePath, FileMode.Open))
@@ -65,7 +77,7 @@ namespace Matbot.Services
             }
 
             ServiceAllocator.AllocateStartupServices(bot,RunningServices, this);
-            timer.Change(FindLowestInterval(), FindLowestInterval());
+            
         }
 
         public Service FindServiceByID(int id)
@@ -111,11 +123,12 @@ namespace Matbot.Services
         {
             s.ID = GetNewID();
             RunningServices.Add(s);
-            timer.Change(FindLowestInterval(), FindLowestInterval());
+            
+            timer.Interval = FindLowestInterval();
             return s.ID;
         }
 
-        void ManageServices(object CallInfo)
+        void ManageServices(object source, ElapsedEventArgs e)
         {
             try
             {
@@ -136,13 +149,13 @@ namespace Matbot.Services
             
 
                 SaveChanges();
-                long l = FindLowestInterval();
-                timer.Change(l,l);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Console.WriteLine("Error occurred while managing exceptions: " + e.ToString());
+                Console.WriteLine("Error occurred while managing exceptions: " + ex.ToString());
             }
+
+            StartTimer();
         }
 
         private void SaveChanges()
@@ -165,8 +178,17 @@ namespace Matbot.Services
 
         public string GetAllServicesString()
         {
+            return GetAllServicesString(null);
+        }
+
+        public string GetAllServicesString(Matbot.Client.ChatItemId id)
+        {
             string s = "";
-            foreach (Service ser in RunningServices) s += ser.ToString() + "\n";
+            foreach (Service ser in RunningServices)
+            {
+                if (id==null) s += ser.ToString() + "\n";
+                else s += ser.ToString(id) + "\n";
+            }
             return s;
         }
     }
