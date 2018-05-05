@@ -132,6 +132,7 @@ namespace Matbot.Services
         {
             try
             {
+                List<Service> toDelete = new List<Service>();
                 foreach (Service s in RunningServices)
                 {
                     if (s.ShouldElapse())
@@ -142,10 +143,12 @@ namespace Matbot.Services
 
                     if (!s.Running)
                     {
-                        RunningServices.Remove(s);
+                        toDelete.Add(s);
                         continue;
                     }
                 }
+
+                foreach (Service s in toDelete) RunningServices.Remove(s);
             
 
                 SaveChanges();
