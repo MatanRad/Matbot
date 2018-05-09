@@ -20,7 +20,6 @@ namespace Matbot.Services
         public Client.UserRank RequiredRank = Client.UserRank.User;
 
         protected List<ChatItemId> Registered = new List<ChatItemId>();
-        private string file;
 
         public override string ToString(Matbot.Client.ChatItemId chatId)
         {
