@@ -22,6 +22,10 @@ namespace Matbot.Commands.Structure
         public UserRank RequiredRank { get; protected set; }
         public bool HasRequiredRank = true;
 
+        public static int defaultTypePriority = 0;
+
+        protected Dictionary<Type, int> paramTypePriorities = null;
+
         private CmdVariation[] variations;
 
         public CmdVariation[] Variations
@@ -158,10 +162,53 @@ namespace Matbot.Commands.Structure
             return vars;
         }
 
+        public int CalculateVarPriority(CmdVariation v)
+        {
+            var keys = this.paramTypePriorities.Keys;
+
+            int priority = 0;
+
+            foreach(CmdAttribute a in v.Attributes)
+            {
+                if (!keys.Contains(a.AType)) priority += defaultTypePriority;
+                else
+                {
+                    priority += paramTypePriorities[a.AType];
+                }
+            }
+
+            return priority;
+        }
+        
+
+        public CmdVariation ResolveConflictViaPriority(List<CmdVariation> conflicts)
+        {
+            int[] priorities = new int[conflicts.Count];
+
+            for(int i = 0; i < conflicts.Count; i++)
+            {
+                priorities[i] = CalculateVarPriority(conflicts[i]);
+            }
+
+            int max = priorities.Max();
+            int argmax = -1;
+
+            for (int i = 0; i < priorities.Length; i++)
+            {
+                if (priorities[i] == max)
+                {
+                    if (argmax != -1) return null; // The maximum priority is held by 2+ variations. Hence conflict still remains.
+                    argmax = i;
+                }
+            }
+
+            return conflicts[argmax];
+        }
+
         public  CmdVariation FindCommandVariationByParsedInput(ParsedInput input, out List<object> converted)
         {
             CmdVariation[] vars = Variations;
-
+            var convertedPerVar = new List<List<object>>();
             converted = new List<object>();
             List<CmdVariation> conflicts = new List<CmdVariation>();
 
@@ -172,13 +219,16 @@ namespace Matbot.Commands.Structure
                 if (v == null) continue;
                 if (v.Attributes.Count != param.Length) continue;
                 bool failed = false;
+                var convertedVar = new List<object>();
+                convertedPerVar.Add(convertedVar);
+
                 for (int i = 0; i < v.Attributes.Count; i++)
                 {
                     CmdAttribute a = v.Attributes[i];
                     try
                     {
                         object t = ClassConverter.ConvertToObj(param[i], a.AType);
-                        converted.Add(t);
+                        convertedVar.Add(t);
                     }
                     catch (Exception e)
                     {
@@ -186,7 +236,7 @@ namespace Matbot.Commands.Structure
                         {
                             System.Diagnostics.Debug.WriteLine(e.GetType().Name);
                             failed = true;
-                            converted.Clear();
+                            convertedPerVar.RemoveAt(convertedPerVar.Count - 1);
                             break;
                         }
                         else throw e;
@@ -201,8 +251,25 @@ namespace Matbot.Commands.Structure
             }
 
             if (conflicts.Count == 0) throw new CorrectVariationNotFoundException(input);
-            if (conflicts.Count > 1) throw new ConflictingVariationsException(input.Name, conflicts.ToArray(), input.RawInput, null);
+            if (conflicts.Count > 1)
+            {
+                bool throwError = true;
+                if (this.paramTypePriorities != null)
+                {
+                    CmdVariation resolve = ResolveConflictViaPriority(conflicts);
+                    if (resolve != null)
+                    {
+                        throwError = false;
+                        converted = convertedPerVar[conflicts.IndexOf(resolve)];
+                        return resolve;
+                    }
+                }
 
+                if (throwError) throw new ConflictingVariationsException(input.Name, conflicts.ToArray(), input.RawInput, null);
+            }
+
+            //case where only 1 variation succeeds
+            converted = convertedPerVar[0];
             return conflicts[0];
         }
 
@@ -234,6 +301,43 @@ namespace Matbot.Commands.Structure
             else m.Invoke(this, n);
         }
 
-        
+        public override string ToString()
+        {
+            string s = "";
+
+            for (int i=0; i<Variations.Length; i++)
+            {
+                s += "[" + (i + 1) + "] " + Variations[i].ToString();
+                if (i != Variations.Length - 1) s += "\n";
+            }
+            return s;
+        }
+
+        public string ToStringDetailed()
+        {
+            string msg = this.ToString();
+
+            bool printedHeader = false;
+            for (int i = 0; i < Variations.Length; i++)
+            {
+                CmdVariation v = Variations[i];
+
+                if (v.Description != null)
+                {
+                    if (!v.Description.Equals(""))
+                    {
+                        if(!printedHeader)
+                        {
+                            printedHeader = true;
+                            msg += "Descriptions:";
+                        }
+
+                        msg += "\n[" + i + "] " + v.Description; 
+                    }
+                }
+            }
+           
+            return msg;
+        }
     }
 }

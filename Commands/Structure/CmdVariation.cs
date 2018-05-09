@@ -23,12 +23,25 @@ namespace Matbot.Commands.Structure
         
         public override string ToString()
         {
-            string msg = "/" + CommandName + " (";
+            string msg = "/" + CommandName;
+
             foreach (CmdAttribute a in Attributes)
             {
-                msg += a.Name + ",";
+                if (a.Optional) msg += string.Format(" [{0}]", a.Name);
+                else msg += string.Format(" <{0}>", a.Name);
+            }            
+
+            return msg;
+        }
+
+        public string ToStringDetailed()
+        {
+            string msg = this.ToString();
+
+            if (this.Description != null)
+            {
+                if (!this.Description.Equals("")) msg += "\nDescription:\n" + this.Description;
             }
-            msg = msg.Remove(msg.Length - 1, 1) + ")";
 
             return msg;
         }
