@@ -30,6 +30,7 @@ namespace Matbot.Commands.Structure
             var cm17 = new Commands.FiveSecondsCommand();
             var cm18 = new Commands.PyScriptCommand();
             var cm19 = new Commands.ScreenSaverCommand();
+            var cm20 = new Commands.HelpCommand();
             SharedManager.RegisterNewCommand(cmd);
             SharedManager.RegisterNewCommand(cm2);
             SharedManager.RegisterNewCommand(cm3);
@@ -49,6 +50,7 @@ namespace Matbot.Commands.Structure
             SharedManager.RegisterNewCommand(cm17);
             SharedManager.RegisterNewCommand(cm18);
             SharedManager.RegisterNewCommand(cm19);
+            SharedManager.RegisterNewCommand(cm20);
         }
     }
 }
