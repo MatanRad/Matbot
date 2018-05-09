@@ -31,6 +31,17 @@ namespace Matbot.Services
             else if (Once == Commands.PyScriptCommand.PyScriptOnce.onceuntiloutput) StopAfterOutput = true;
         }
 
+        public PyScriptService(Bot bot, int hour, int minute, string file, Commands.PyScriptCommand.PyScriptOnce Once) : base(bot, file)
+        {
+            this.file = file;
+            ElapseTime = new TimeSpan(hour, minute, 0);
+
+            if (!File.Exists(Path.Combine(PyScriptPath, file))) Stop();
+
+            if (Once == Commands.PyScriptCommand.PyScriptOnce.once) this.ElapseOnce = true;
+            else if (Once == Commands.PyScriptCommand.PyScriptOnce.onceuntiloutput) StopAfterOutput = true;
+        }
+
         public override void Elapsed()
         {
             if(!IsScriptRunning) Task.Factory.StartNew(() => RunScript());

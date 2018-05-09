@@ -38,9 +38,27 @@ namespace Matbot.Commands
             StartNew(m, seconds, file, PyScriptOnce.repeat);
         }
 
+        public void Execute(Message m, int hour, int minute, string file, PyScriptOnce once)
+        {
+            StartNew(m, hour, minute, file, once);
+        }
+
+        public void Execute(Message m, int hour, int minute, string file)
+        {
+            StartNew(m, hour, minute, file, PyScriptOnce.repeat);
+        }
+
         void StartNew(Message m, int seconds, string file, PyScriptOnce once)
         {
             PyScriptService ser = new PyScriptService(m.Client.Bot, seconds, file, once);
+            int id = m.Client.Bot.SrvManager.RegisterNewService(ser);
+            m.Reply("PyScript Service started with ID: " + id + ". This chat was registered to it.");
+            ser.Register(m.Chat);
+        }
+
+        void StartNew(Message m, int hour, int minute, string file, PyScriptOnce once)
+        {
+            PyScriptService ser = new PyScriptService(m.Client.Bot, hour, minute, file, once);
             int id = m.Client.Bot.SrvManager.RegisterNewService(ser);
             m.Reply("PyScript Service started with ID: " + id + ". This chat was registered to it.");
             ser.Register(m.Chat);
