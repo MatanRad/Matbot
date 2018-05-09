@@ -14,8 +14,6 @@ namespace Matbot.Client
         protected CommandManager CustomCmdManger = new CommandManager();
         protected HandlerManager CustomHndManager = new HandlerManager();
 
-        //public UserDatabase UsrDatabase { get { return usrDatabase; } }
-
         public bool Running = false;
 
         public abstract void Start();
@@ -26,6 +24,21 @@ namespace Matbot.Client
         public virtual void RegisterHandler(IHandler h)
         {
             CustomHndManager.Register(h);
+        }
+
+        public CommandDescriptor[] GetCommandDescriptors()
+        {
+            CommandDescriptor[] clientCommands = this.CustomCmdManger.GetCommandDescriptors();
+            CommandDescriptor[] botCommands = this.Bot.SharedManager.GetCommandDescriptors();
+
+            if (clientCommands == null) return botCommands;
+
+            CommandDescriptor[] finArray = new CommandDescriptor[clientCommands.Length + botCommands.Length];
+
+            Array.Copy(clientCommands, finArray, clientCommands.Length);
+            Array.Copy(botCommands, 0, finArray, clientCommands.Length, botCommands.Length);
+
+            return finArray;
         }
 
         public virtual void OnMessageReceived(Message message)
