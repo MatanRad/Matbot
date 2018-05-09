@@ -11,6 +11,9 @@ using System.Xml.Serialization;
 
 namespace Matbot.Client
 {
+    /// <summary>
+    /// Data Structure to store Users' information and ranks.
+    /// </summary>
     [Serializable]
     public class UserDatabase
     {
@@ -22,6 +25,10 @@ namespace Matbot.Client
         {
         }
 
+        /// <summary>
+        /// Initialize from a saved UserDatabase or create it, if doesn't exist.
+        /// </summary>
+        /// <param name="path">Path to UserDatabase file.</param>
         public UserDatabase(string path)
         {
             FilePath = path;
@@ -44,6 +51,11 @@ namespace Matbot.Client
             return (i==-1 ? null : users[i]);
         }
 
+        /// <summary>
+        /// Find index of a user in the User List.
+        /// </summary>
+        /// <param name="c">Sets the user's client to c.</param>
+        /// <returns>Index of the user. Or -1 if not found.</returns>
         private int FindUserIndexById(string client, ulong id, Client c = null)
         {
             for(int i=0;i<users.Count;i++)
@@ -133,6 +145,9 @@ namespace Matbot.Client
             return u.BotRank;
         }
 
+        /// <summary>
+        /// Saves the database to file at 'FilePath'.
+        /// </summary>
         private void SaveChanges()
         {
             if (FilePath == null) return;

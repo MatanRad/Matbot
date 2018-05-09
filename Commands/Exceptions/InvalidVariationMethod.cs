@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace Matbot.Commands.Structure.Exceptions
 {
+    /// <summary>
+    /// Exception when searching a non-existing CommandVariation using MethodInfo. 
+    /// </summary>
     [Serializable]
     class InvalidVariationMethodException : Exception
     {

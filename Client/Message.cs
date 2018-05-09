@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Matbot.Client
 {
+    /// <summary>
+    /// Represents a type of message, with respect to big messaging apps.
+    /// </summary>
     public enum MessageType
     {
         TextMessage,
@@ -19,11 +22,22 @@ namespace Matbot.Client
         Unknown
     }
 
-
+    /// <summary>
+    /// A wrapper for a chat message.
+    /// Main form of communication with the bot.
+    /// </summary>
     public class Message
     {
         public ChatItemId Id;
+
+        /// <summary>
+        /// The chat this message was sent in.
+        /// </summary>
         public Chat Chat { get; private set; }
+
+        /// <summary>
+        /// Author of the message.
+        /// </summary>
         public User User { get; private set; }
         public string Text { get; private set; }
         public Audio audio = null;
@@ -54,11 +68,19 @@ namespace Matbot.Client
             Type = type;
         }
 
+        /// <summary>
+        /// Send text message in this message's chat.
+        /// </summary>
+        /// <returns>Success of delivery.</returns>
         public bool Reply(string message)
         {
             return this.Client.SendMessage(this.Chat, message);
         }
 
+        /// <summary>
+        /// Send a formatted message in this message's chat.
+        /// </summary>
+        /// <returns>Success of delivery.</returns>
         public bool Reply(FormattedMessage message)
         {
             return this.Client.SendMessage(this.Chat, message);

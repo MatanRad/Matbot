@@ -16,6 +16,9 @@ namespace Matbot.Client
         Owner = 2
     }
 
+    /// <summary>
+    /// Wrapper for a bot user.
+    /// </summary>
     [Serializable]
     public class User
     {
@@ -46,11 +49,17 @@ namespace Matbot.Client
             Client = c;
         }
 
+        /// <summary>
+        /// Update a User's rank.
+        /// </summary>
         public void ChangeDatabaseRank(UserRank rank)
         {
             Client.SetUserRank(this, rank);
         }
 
+        /// <summary>
+        /// Return string describing user id and name.
+        /// </summary>
         public override string ToString()
         {
             return "User " + Id.Ids.ToString() + "\nName: " + Name;

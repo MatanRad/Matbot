@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Timers;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 
+/// <summary>
+/// A data structure used for storing and maintaining services.
+/// </summary>
 namespace Matbot.Services
 {
     [Serializable]
@@ -29,6 +31,9 @@ namespace Matbot.Services
         [NonSerialized]
         Timer timer;
 
+        /// <summary>
+        /// The file where the data structure is saved.
+        /// </summary>
         string FilePath;
 
         public ServiceManager(Bot bot)
@@ -39,6 +44,9 @@ namespace Matbot.Services
             ServiceAllocator.AllocateStartupServices(bot,RunningServices, this);
         }
 
+        /// <summary>
+        /// Starts (or restarts) the timer to the next iteration.
+        /// </summary>
         private void StartTimer()
         {
             if (timer == null)
@@ -53,6 +61,11 @@ namespace Matbot.Services
 
         }
 
+        /// <summary>
+        /// Initialize from saved file (or create if doesn't exist)
+        /// </summary>
+        /// <param name="bot">The ServiceManager's bot.</param>
+        /// <param name="path">File path for saving services.</param>
         public ServiceManager(Bot bot, string path)
         {
             MaxIDNum = 50000;
@@ -85,6 +98,9 @@ namespace Matbot.Services
             return RunningServices.Find(x => x.ID == id);
         }
 
+        /// <summary>
+        /// Returns the lowest time interval in milliseconds that the next iteration should be.
+        /// </summary>
         public long FindLowestInterval()
         {
             if (RunningServices.Count == 0) return (long)Math.Floor(DefaultInterval.TotalMilliseconds);
@@ -93,17 +109,26 @@ namespace Matbot.Services
             else return min;
         }
 
+        /// <summary>
+        /// If the service runs on intervals, returns the interval in milliseconds. 0 otherwise.
+        /// </summary>
+        /// <param name="ser"></param>
+        /// <returns></returns>
         long GetServiceInterval(Service ser)
         {
             if (ser.ElapseEvery != null) return (long)Math.Floor(ser.ElapseEvery.TotalMilliseconds);
             return 0;
         }
+
         int GetServiceID(Service ser)
         {
             if (ser == null) return 0;
             return ser.ID;
         }
 
+        /// <summary>
+        /// Generates an ID for a new service.
+        /// </summary>
         int GetNewID()
         {
             bool found = true;
@@ -119,6 +144,9 @@ namespace Matbot.Services
             return nid;
         }
 
+        /// <summary>
+        /// Register a service and assign an ID to it.
+        /// </summary>
         public int RegisterNewService(Service s)
         {
             s.ID = GetNewID();
@@ -128,6 +156,9 @@ namespace Matbot.Services
             return s.ID;
         }
 
+        /// <summary>
+        /// Iterates over services per time period and manages them. 
+        /// </summary>
         void ManageServices(object source, ElapsedEventArgs e)
         {
             try
@@ -161,6 +192,9 @@ namespace Matbot.Services
             StartTimer();
         }
 
+        /// <summary>
+        /// Saves data structure to file.
+        /// </summary>
         private void SaveChanges()
         {
             if (FilePath == null) return;

@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace Matbot.Client
 {
-    // Class inspired by Google's Speech API, added supported audio types.
+    /// <summary>
+    /// Wrapper for Voice Audio. Inspired by Google's Speech API.
+    /// </summary>
     public class Voice : Audio
     {
         public enum VoiceAudioType

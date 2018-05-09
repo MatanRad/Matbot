@@ -7,12 +7,19 @@ using Matbot.Commands.Structure.Exceptions;
 
 namespace Matbot.Commands.Structure
 {
+    /// <summary>
+    /// Data Structure for storing and communicating with commands.
+    /// </summary>
     public class CommandManager
     {
-        //public static CommandManager SharedManager;
-
+        /// <summary>
+        /// A mapping from command name to Command.
+        /// </summary>
         private Dictionary<string, Command> Commands = new Dictionary<string, Command>();
 
+        /// <summary>
+        /// Returns array of CommandDescriptors for every command stored.
+        /// </summary>
         public CommandDescriptor[] GetCommandDescriptors()
         {
             var keys = Commands.Keys.ToArray();
@@ -38,12 +45,22 @@ namespace Matbot.Commands.Structure
         {
         }
 
+        /// <summary>
+        /// Given a message, find corresponding command and run it.
+        /// </summary>
+        /// <param name="msg">The message that ran the command.</param>
+        /// <param name="input">The input from the user.</param>
         public bool ExecuteUserInput(Matbot.Client.Message msg, string input)
         {
             ParsedInput p = new ParsedInput(input);
             return ExecuteUserInput(msg, p);
         }
 
+        /// <summary>
+        /// Given a message, find corresponding command and run it.
+        /// </summary>
+        /// <param name="msg">The message that ran the command.</param>
+        /// <param name="input">The input from the user.</param>
         public bool ExecuteUserInput(Matbot.Client.Message msg, ParsedInput p)
         {
             if (p == null) return false;

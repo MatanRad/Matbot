@@ -10,24 +10,46 @@ using Matbot.Client;
 
 namespace Matbot.Commands.Structure
 {
+    /// <summary>
+    /// Represents a bot command.
+    /// </summary>
     public abstract class Command : ICommand
     {
         public string Name
         { get; protected set; }
 
+        /// <summary>
+        /// Types the Execute methods need to start with.
+        /// </summary>
         public static Type[] InitialTypes = { typeof(Message) };
         public static string executeMethodName = "Execute";
         protected static BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public;
 
+        /// <summary>
+        /// User rank required to run this command.
+        /// </summary>
         public UserRank RequiredRank { get; protected set; }
+
+        /// <summary>
+        /// Whether a rank is required to run this command.
+        /// </summary>
         public bool HasRequiredRank = true;
 
+        /// <summary>
+        /// Priority of parameter type not present in paramTypePriorities.
+        /// </summary>
         public static int defaultTypePriority = 0;
 
+        /// <summary>
+        /// Mapping from type to integer priority. If not null, used for solving conflicts.
+        /// </summary>
         protected Dictionary<Type, int> paramTypePriorities = null;
 
         private CmdVariation[] variations;
 
+        /// <summary>
+        /// All variations of this command.
+        /// </summary>
         public CmdVariation[] Variations
         {
             get
@@ -47,11 +69,17 @@ namespace Matbot.Commands.Structure
             Variations = InitVariations();
         }
 
+        /// <summary>
+        /// Returns a string to be replied when a user's rank is not high enough to run this command.
+        /// </summary>
         public virtual string GetNoPermissionMessage(Message m)
         {
             return "You have to be at least a " + RequiredRank.ToString() + " to call /" + Name + "!";
         }
 
+        /// <summary>
+        /// Find a variation using MethodInfo.
+        /// </summary>
         protected CmdVariation FindVariationByMethodInfo(MethodInfo method)
         {
             List<CmdVariation> conflicting = new List<CmdVariation>();
@@ -90,6 +118,12 @@ namespace Matbot.Commands.Structure
             return v;
         }
 
+        /// <summary>
+        /// Add description for a command variation.
+        /// </summary>
+        /// <param name="method">MethodInfo for the variation's method.</param>
+        /// <param name="desc">Variation description.</param>
+        /// <param name="names">Array of names for each command parameter</param>
         protected void AddCmdVariationDesc(MethodInfo method, string desc, string[] names = null)
         {
             CmdVariation v = FindVariationByMethodInfo(method);
@@ -107,6 +141,10 @@ namespace Matbot.Commands.Structure
             }
         }
 
+        /// <summary>
+        /// Iterates over all this class' methods, finds and coverts fitting methods to variations.
+        /// </summary>
+        /// <returns>Array of converted variations.</returns>
         private CmdVariation[] InitVariations()
         {
             MethodInfo[] allmethods = this.GetType().GetMethods(Command.bindingFlags);
@@ -162,6 +200,9 @@ namespace Matbot.Commands.Structure
             return vars;
         }
 
+        /// <summary>
+        /// Calculates priority of variation.
+        /// </summary>
         public int CalculateVarPriority(CmdVariation v)
         {
             var keys = this.paramTypePriorities.Keys;
@@ -180,7 +221,10 @@ namespace Matbot.Commands.Structure
             return priority;
         }
         
-
+        /// <summary>
+        /// Tries to resolve conflict by finding a single variation with maximum priority.
+        /// </summary>
+        /// <param name="conflicts">List of conflicting cmdVariation</param>
         public CmdVariation ResolveConflictViaPriority(List<CmdVariation> conflicts)
         {
             int[] priorities = new int[conflicts.Count];
@@ -197,7 +241,8 @@ namespace Matbot.Commands.Structure
             {
                 if (priorities[i] == max)
                 {
-                    if (argmax != -1) return null; // The maximum priority is held by 2+ variations. Hence conflict still remains.
+                    // The maximum priority is held by 2+ variations. Hence conflict still remains.
+                    if (argmax != -1) return null;
                     argmax = i;
                 }
             }
@@ -205,6 +250,9 @@ namespace Matbot.Commands.Structure
             return conflicts[argmax];
         }
 
+        /// <summary>
+        /// Try to find a single CmdVariation from a user's ParsedInput
+        /// </summary>
         public  CmdVariation FindCommandVariationByParsedInput(ParsedInput input, out List<object> converted)
         {
             CmdVariation[] vars = Variations;
@@ -268,11 +316,16 @@ namespace Matbot.Commands.Structure
                 if (throwError) throw new ConflictingVariationsException(input.Name, conflicts.ToArray(), input.RawInput, null);
             }
 
-            //case where only 1 variation succeeds
+            // Case where only 1 variation succeeds
             converted = convertedPerVar[0];
             return conflicts[0];
         }
 
+        /// <summary>
+        /// Removes the first InitialTypes.Length items from 'info'.
+        /// </summary>
+        /// <typeparam name="T">Type of the given 'info' array.</typeparam>
+        /// <param name="info">Array to filter out from.</param>
         public static T[] FilterOutMethodParameters<T>(T[] info)
         {
             if (info.Length < Command.InitialTypes.Length) return null;
@@ -286,8 +339,16 @@ namespace Matbot.Commands.Structure
             return n;
         }
 
+        /// <summary>
+        /// Default command variation.
+        /// </summary>
+        /// <param name="message"></param>
         public abstract void Execute(Message message);
 
+        /// <summary>
+        /// When given a user's input, reformat it before finding variations.
+        /// </summary>
+        /// <param name="input">The input to be reformatted.</param>
         public virtual void ReformatInput(ParsedInput input) { }
 
         public void ExecuteVariation(CmdVariation v, Message msg, object[] parameters)
@@ -301,6 +362,9 @@ namespace Matbot.Commands.Structure
             else m.Invoke(this, n);
         }
 
+        /// <summary>
+        /// Returns a string detailing each variation.
+        /// </summary>
         public override string ToString()
         {
             string s = "";
@@ -313,6 +377,9 @@ namespace Matbot.Commands.Structure
             return s;
         }
 
+        /// <summary>
+        /// Returns a string detailing each variation and their respective description.
+        /// </summary>
         public string ToStringDetailed()
         {
             string msg = this.ToString();

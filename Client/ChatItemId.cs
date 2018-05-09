@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace Matbot.Client
 {
+    /// <summary>
+    /// ID for any chat item: message/user/chat.
+    /// ID per Client.
+    /// </summary>
     [Serializable]
     public class ChatItemId
     {
@@ -33,9 +37,8 @@ namespace Matbot.Client
         }
 
         /// <summary>
-        /// Check if the 2 IDS have an itersection, that means if there exists some client in which both have the same ID.
+        /// Check if the 2 IDS have an itersection: if there exists some client in which both have the same ID.
         /// </summary>
-        /// <param name="other">The other ChatID</param>
         public bool Intersects(ChatItemId other)
         {
             foreach(KeyValuePair<string,ulong> p in Ids)
@@ -47,7 +50,7 @@ namespace Matbot.Client
         }
 
         /// <summary>
-        /// Checks if there is a conflict in the chatids, meaning a client in which they have different IDs.
+        /// Checks if there is a conflict in the ChatIds: a client in which they have different IDs.
         /// </summary>
         public bool Conflicts(ChatItemId other)
         {
@@ -59,6 +62,10 @@ namespace Matbot.Client
             return false;
         }
 
+        /// <summary>
+        /// Merge two (non-conflicting) ItemIds into one.
+        /// </summary>
+        /// <returns>The merged ChatItemID.</returns>
         public static ChatItemId Merge(ChatItemId c1, ChatItemId c2)
         {
             if (c1 == null || c2 == null) return null;
@@ -79,10 +86,8 @@ namespace Matbot.Client
             return id;
         }
 
-        public override bool Equals(object obj)
+        public bool Equals(ChatItemId obj)
         {
-            if (!(obj is ChatItemId)) return false;
-
             ChatItemId other = obj as ChatItemId;
             foreach (KeyValuePair<string, ulong> p in Ids)
             {
@@ -97,11 +102,18 @@ namespace Matbot.Client
             return true;
         }
 
+        /// <summary>
+        /// Create ItemId from existing mapping. 
+        /// </summary>
+        /// <param name="ids">A client-ID to ID mapping.</param>
         public ChatItemId(Dictionary<string, ulong> ids)
         {
             Ids = new Dictionary<string, ulong>(ids);
         }
 
+        /// <summary>
+        /// Returns Client to ID mapping in a JSON-like format.
+        /// </summary>
         public override string ToString()
         {
             string s = "{";

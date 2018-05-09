@@ -7,12 +7,18 @@ using System.Threading.Tasks;
 
 namespace Matbot.Commands.Structure
 {
+    /// <summary>
+    /// Represents a variation of a command.
+    /// </summary>
     public class CmdVariation
     {
         public string CommandName;
         public List<CmdAttribute> Attributes = new List<CmdAttribute>();
         public string Description = "";
         
+        /// <summary>
+        /// Returns a type array of the types of each parameter in the variation method.
+        /// </summary>
         public Type[] GetAttributeTypes()
         {
             Type[] t = new Type[Attributes.Count];
@@ -21,6 +27,9 @@ namespace Matbot.Commands.Structure
             return t;
         }
         
+        /// <summary>
+        /// Returns string visualzation of variation.
+        /// </summary>
         public override string ToString()
         {
             string msg = "/" + CommandName;
@@ -34,6 +43,9 @@ namespace Matbot.Commands.Structure
             return msg;
         }
 
+        /// <summary>
+        /// Returns string visualzation of variation, with description if available.
+        /// </summary>
         public string ToStringDetailed()
         {
             string msg = this.ToString();
@@ -83,6 +95,9 @@ namespace Matbot.Commands.Structure
             Attributes = new List<CmdAttribute>(attr);
         }
 
+        /// <summary>
+        /// Returns type array corresponding with a Command method (e.g. with Message and InitialTypes at beggining).
+        /// </summary>
         internal Type[] GetMethodAttributeTypes()
         {
             Type[] t = new Type[Attributes.Count+Command.InitialTypes.Length];

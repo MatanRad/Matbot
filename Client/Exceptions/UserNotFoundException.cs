@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace Matbot.Client.Exceptions
 {
+    /// <summary>
+    /// Exception when trying to access a non-existing user in UserDatabase.
+    /// </summary>
     [Serializable]
     class UserNotFoundException : Exception
     {

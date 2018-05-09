@@ -7,9 +7,15 @@ using Matbot.Client;
 
 namespace Matbot.Services
 {
+    /// <summary>
+    /// A service that users can register Chats to, allows for services to keep track of Chats.
+    /// </summary>
     [Serializable]
     abstract class RegisterableService : Service
     {
+        // Fully - a ChatId is fully registered on all clients.
+        // Partially - a ChatId is registered on a client.
+        // Empty - a ChatId is not registered on any client.
         public enum ChatRegisterStatus
         {
             Fully,

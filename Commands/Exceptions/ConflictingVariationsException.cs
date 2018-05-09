@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace Matbot.Commands.Structure.Exceptions
 {
+    /// <summary>
+    /// Exception when a user's input has two conflicting command variations.
+    /// </summary>
     [Serializable]
     class ConflictingVariationsException : Exception
     {

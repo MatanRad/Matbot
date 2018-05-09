@@ -15,9 +15,25 @@ namespace Matbot.Commands.Structure
                 return RawInput[0] == '/';
             }
         }
+
+        /// <summary>
+        /// If input is command then the command's name. Otherwise null.
+        /// </summary>
         public string Name;
+
+        /// <summary>
+        /// Original string before parsing.
+        /// </summary>
         public string RawInput;
+        
+        /// <summary>
+        /// Original string with command name (before fist whitespace).
+        /// </summary>
         public string RawParameters;
+
+        /// <summary>
+        /// List of string parameters.
+        /// </summary>
         public string[] Parameters;
 
         public ParsedInput(string input)

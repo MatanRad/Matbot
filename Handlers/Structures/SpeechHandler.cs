@@ -8,8 +8,14 @@ using Google.Cloud.Speech.V1;
 
 namespace Matbot.Handlers.Structure
 {
+    /// <summary>
+    /// Handler that transcribes voice messages into string automatically. Uses Google Speech API. 
+    /// </summary>
     public abstract class SpeechHandler : VoiceHandler
     {
+        /// <summary>
+        /// Convert VoiceAudioType into Google's AudioEncoding
+        /// </summary>
         public static RecognitionConfig.Types.AudioEncoding VoiceTypeToGoogleType(Voice.VoiceAudioType type)
         {
             switch(type)
@@ -33,10 +39,19 @@ namespace Matbot.Handlers.Structure
             }
         }
 
+        /// <summary>
+        /// Language code for Google's Speech API.
+        /// </summary>
         public string languageCode = "en-GB";
 
+        /// <summary>
+        /// Max duration of voice transcription in seconds.
+        /// </summary>
         public int maxDur = 20;
 
+        /// <summary>
+        /// Should the transcription happen asynchronously. 
+        /// </summary>
         public bool isAsync = true;
 
         public override void Handle(Message m)
@@ -54,6 +69,10 @@ namespace Matbot.Handlers.Structure
             }
         }
 
+
+        /// <summary>
+        /// Sends the voice audio to Google's API and runs HandleSpeech with transcription.
+        /// </summary>
         private void TranscribeSpeech(Message m)
         {
             if (m.voice == null) throw new Exception.EmptyVoiceMessageException(m);
@@ -82,6 +101,9 @@ namespace Matbot.Handlers.Structure
             }
         }
 
+        /// <summary>
+        /// Reply with a max duration exceeded message.
+        /// </summary>
         void MaxDurationExceeded(Message m)
         {
             m.Reply("Max voice duration exceeded! (" + maxDur + " seconds).");

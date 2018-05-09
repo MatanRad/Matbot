@@ -9,6 +9,9 @@ using Matbot.Commands;
 
 namespace Matbot.Commands.Structure.Exceptions
 {
+    /// <summary>
+    /// Exception when naming variation attributes with wrong number of names.
+    /// </summary>
     [Serializable]
     class InvalidVariationNameCountException : Exception
     {

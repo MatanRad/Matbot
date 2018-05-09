@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace Matbot.Client
 {
-
+    /// <summary>
+    /// Represents a type of chat, with respect to big messaging apps.
+    /// </summary>
     public enum ChatType : uint
     {
         Unknown,
@@ -16,7 +18,9 @@ namespace Matbot.Client
         Supergroup
     }
 
-
+    /// <summary>
+    /// Represents a Chat in a messenger or any other bot client. 
+    /// </summary>
     public class Chat
     {
         public ChatItemId Id { get; private set; }

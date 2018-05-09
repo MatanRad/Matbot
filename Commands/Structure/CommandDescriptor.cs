@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Matbot.Commands.Structure
 {
+    /// <summary>
+    /// Represents a descriptor of a command, containing only basic info about it.
+    /// </summary>
     public class CommandDescriptor
     {
         private Command command;

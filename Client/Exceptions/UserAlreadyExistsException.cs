@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace Matbot.Client.Exceptions
 {
+    /// <summary>
+    /// Exception when trying to add an already existing user in UserDatabase.
+    /// </summary>
     [Serializable]
     class UserAlreadyExistsException : Exception
     {

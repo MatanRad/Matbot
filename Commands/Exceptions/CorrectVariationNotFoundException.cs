@@ -8,6 +8,9 @@ using System.Runtime.Serialization;
 
 namespace Matbot.Commands.Structure.Exceptions
 {
+    /// <summary>
+    /// Exception when a user's input matches no variation for a given command.
+    /// </summary>
     [Serializable]
     class CorrectVariationNotFoundException : Exception
     {

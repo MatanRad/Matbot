@@ -7,6 +7,9 @@ using Matbot.Client;
 
 namespace Matbot.Handlers.Structure
 {
+    /// <summary>
+    /// A message handler that automatically handles Voice messages.
+    /// </summary>
     public abstract class VoiceHandler : IHandler
     {
         public abstract void Handle(Message m);

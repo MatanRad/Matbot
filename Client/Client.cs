@@ -7,6 +7,10 @@ using Matbot.Commands.Structure;
 using Matbot.Handlers.Structure;
 namespace Matbot.Client
 {
+    /// <summary>
+    /// Interfaces between the messenger/chat interface and the bot.
+    /// Responsible for converting the client API's types to the bot's.
+    /// </summary>
     public abstract class Client
     {
         public Bot Bot;
@@ -115,6 +119,10 @@ namespace Matbot.Client
             throw new NotImplementedException("DeleteMessage functionality not implemented in bot client with id: " + GetClientId());
         }
 
+        /// <summary>
+        /// Creates new 'User' instance and assigns it's saved rank if it exists.
+        /// </summary>
+        /// <returns>New user instance.</returns>
         public virtual User GetNewUser(ulong id)
         {
             User u = new User(this, this.GetClientId(), id);
@@ -123,7 +131,6 @@ namespace Matbot.Client
                 u.BotRank = Bot.UsrDatabase.GetUserRank(u);
             }
             catch(Exceptions.UserNotFoundException) { }
-
 
             return u;
         }

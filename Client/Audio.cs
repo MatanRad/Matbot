@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace Matbot.Client
 {
+    /// <summary>
+    /// Wrapper for Audio stream/file.
+    /// </summary>
     public class Audio
     {
         public string Title;
@@ -16,6 +19,9 @@ namespace Matbot.Client
         public int Duration;
         public Stream AudioStream;
 
+        /// <summary>
+        /// File name with extension (if available)
+        /// </summary>
         public string FormattedName
         {
             get

@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace Matbot.Commands.Structure
 {
+    /// <summary>
+    /// Extension for MethodInfo class.
+    /// </summary>
     public static class MethodInfoExtension
     {
         public static string GetFormattedCmdString(this MethodInfo method)
