@@ -13,6 +13,22 @@ namespace Matbot.Commands.Structure
 
         private Dictionary<string, Command> Commands = new Dictionary<string, Command>();
 
+        public CommandDescriptor[] GetCommandDescriptors()
+        {
+            var keys = Commands.Keys.ToArray();
+
+            if (keys.Length == 0) return null;
+
+            CommandDescriptor[] descs = new CommandDescriptor[keys.Length];
+
+            for(int i=0; i<descs.Length; i++)
+            {
+                descs[i] = new CommandDescriptor(Commands[keys[i]]);
+            }
+
+            return descs;
+        }
+
         public void RegisterNewCommand(Command cmd)
         {
             Commands.Add(cmd.Name.ToLower(), cmd);
